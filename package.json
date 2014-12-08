@@ -1,0 +1,36 @@
+{
+  "name": "traverson-hal",
+  "version": "1.0.0",
+  "author": "Bastian Krol",
+  "description": "HAL (hypertext application language) adapter for Traverson",
+  "repository": "https://github.com/basti1302/traverson-hal.git",
+  "scripts": {
+    "test": "grunt"
+  },
+  "keywords": [
+    "JSON",
+    "REST",
+    "API",
+    "HATEOAS",
+    "hypertext",
+    "hypermedia",
+    "HAL"
+  ],
+  "peerDependencies": {
+    "traverson": "1.0.0"
+  },
+  "dependencies": {
+    "halfred": "0.4.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.18.2",
+    "poll-forever": "^1.0.0",
+    "sinon": "^1.9.1",
+    "sinon-chai": "^2.5.0",
+    "traverson-mock-response": "^1.0.0"
+  },
+  "engines": {
+    "node": ">= 0.10.x"
+  }
+}
