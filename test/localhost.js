@@ -1,6 +1,7 @@
 'use strict';
 
 var traverson = require('traverson')
+  , JsonHalAdapter = require('..')
   , waitFor = require('poll-forever')
   , chai = require('chai')
   , sinon = require('sinon')
@@ -9,9 +10,6 @@ var traverson = require('traverson')
   , expect = chai.expect;
 
 chai.use(sinonChai);
-
-var JsonHalAdapter = require('..');
-traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
 
 describe('Traverson (when tested against a local server)', function() {
 
@@ -25,12 +23,16 @@ describe('Traverson (when tested against a local server)', function() {
       testServer = require('traverson-test-server')
       testServer.start();
     }
-  });
+    traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
+ });
 
   after(function() {
     if (isNodeJs() && testServer) {
       testServer.stop();
     }
+    // de-register HAL plug-in to leave Traverson in a clean state for other
+    // tests
+    traverson.registerMediaType(JsonHalAdapter.mediaType, null);
   });
 
   beforeEach(function() {

@@ -1,6 +1,7 @@
 'use strict';
 
 var traverson = require('traverson')
+  , JsonHalAdapter = require('..')
   , halDocs = require('./hal_docs.js')
   , mockResponse =  require('traverson-mock-response')('application/hal+json')
   , waitFor = require('poll-forever')
@@ -11,9 +12,6 @@ var traverson = require('traverson')
   , expect = chai.expect;
 
 chai.use(sinonChai);
-
-var JsonHalAdapter = require('traverson-hal');
-traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
 
 describe('The JSON-HAL walker\'s', function() {
 
@@ -62,8 +60,19 @@ describe('The JSON-HAL walker\'s', function() {
   var executeRequest;
 
   var callback;
-  var client = traverson.jsonHal.from(rootUri);
+  var client;
   var api;
+
+  before(function() {
+    traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
+    client = traverson.jsonHal.from(rootUri);
+  });
+
+  after(function() {
+    // de-register HAL plug-in to leave Traverson in a clean state for other
+    // tests
+    traverson.registerMediaType(JsonHalAdapter.mediaType, null);
+  });
 
   beforeEach(function() {
     api = client.newRequest();
