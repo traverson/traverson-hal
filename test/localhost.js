@@ -20,7 +20,7 @@ describe('Traverson (when tested against a local server)', function() {
 
   before(function() {
     if (isNodeJs()) {
-      testServer = require('traverson-test-server')
+      testServer = require('traverson-test-server');
       testServer.start();
     }
     traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);

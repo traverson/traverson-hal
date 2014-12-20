@@ -5,3 +5,5 @@ browser/dist/traverson-hal.external.min.js
 browser/dist/traverson-hal.js
 browser/dist/traverson-hal.min.js
 browser/test/browserified_tests.js
+
+disc.html

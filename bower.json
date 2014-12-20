@@ -1,0 +1,34 @@
+{
+  "name": "traverson-hal",
+  "main": "browser/dist/traverson-hal.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/basti1302/traverson-hal",
+  "authors": [
+    "Bastian Krol <bastian.krol@web.de>"
+  ],
+  "description": "HAL (hypertext application language) adapter for Traverson",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "JSON",
+    "REST",
+    "API",
+    "HATEOAS",
+    "hypertext",
+    "hypermedia",
+    "HAL"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "bin",
+    "bower_components",
+    "haltalk_test",
+    "howto_release.markdown",
+    "lib",
+    "node_modules",
+    "server",
+    "test"
+  ]
+}

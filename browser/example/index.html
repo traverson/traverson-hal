@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>traverson-hal in the Browser</title>
+    <link rel="stylesheet" type="text/css" href="assets/bootstrap.min.css">
+    <script src="assets/jquery-2.0.2.min.js"></script>
+    <script src="assets/traverson.min.js"></script>
+    <script src="../dist/traverson-hal.js"></script>
+    <script src="traverson-hal-examples.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1>traverson-hal in the Browser</h1>
+        <p>Traverson makes it easy to work with REST/HATEOAS APIs and
+        traverson-hal adds HAL support to Traverson. It works in
+        Node.js as well as in the browser. This example talks to the local
+        Traverson test server.</p>
+      </div>
+
+      <small>
+        <p>
+        You need to start the test server contained in the traverson-hal repository
+        with <tt>node bin/start-test-server.js</tt>. This serves this page as
+        well as the REST API that is used in the examples. Open the URL
+        <a href="http://localhost:2808/static/browser/example"
+        >http://localhost:2808/static/browser/example</a>
+        in your browser. If the URL in your browser's address bar says
+        <tt>file:...</tt> the examples on this page will <em>not</em> work.
+        </p>
+      </small>
+
+      <h2>Setup</h2>
+      <div id="general"><img src="assets/spinner.gif"/></div>
+      <hr>
+
+      <h2>Working with HAL</h2>
+      <div class="row">
+        <div id="json_hal_request" class="col-md-4"><img src="assets/spinner.gif"/></div>
+        <div class="col-md-2">
+          <a id="btn-hal" class="btn btn-primary" role="button">Start Request</a>
+        </div>
+        <pre id="json_hal_response" class="col-md-6"></pre>
+      </div>
+    </div>
+  </body>
+</html>

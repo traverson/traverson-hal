@@ -10,7 +10,6 @@ function JsonHalAdapter(contentNegotiation, log) {
 JsonHalAdapter.mediaType = 'application/hal+json';
 
 JsonHalAdapter.prototype.findNextStep = function(doc, key) {
-  debugger;
   this.log.debug('parsing hal');
   var halResource = halfred.parse(doc);
 
@@ -180,7 +179,8 @@ function findEmbedded(halResource, doc, parsedKey, log) {
   }
   log.debug('Found an array of embedded resource for: ' + parsedKey.key);
 
-  var step = findeEmbeddedByIndexOrAll(resourceArray, parsedKey, halResource, log);
+  var step =
+    findeEmbeddedByIndexOrAll(resourceArray, parsedKey, halResource, log);
   if (!step) {
     step = findEmbeddedSimple(resourceArray, parsedKey, log);
   }
