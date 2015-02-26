@@ -60,12 +60,11 @@ describe('The JSON-HAL walker\'s', function() {
   var executeRequest;
 
   var callback;
-  var client;
   var api;
 
   before(function() {
     traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
-    client = traverson.jsonHal.from(rootUri);
+    api = traverson.from(rootUri);
   });
 
   after(function() {
@@ -75,7 +74,6 @@ describe('The JSON-HAL walker\'s', function() {
   });
 
   beforeEach(function() {
-    api = client.newRequest();
     get = sinon.stub();
     api.walker.request = { get: get };
     get.withArgs(rootUri, sinon.match.func).callsArgWithAsync(1, null,
@@ -108,7 +106,7 @@ describe('The JSON-HAL walker\'s', function() {
   describe('get method', function() {
 
     it('should follow a single link', function(done) {
-      api.follow('ea:orders').get(callback);
+      api.jsonHal().follow('ea:orders').get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -120,7 +118,7 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow a single link by full rel URLs (instead of curies)',
         function(done) {
-      api.follow('http://example.com/docs/rels/orders').get(callback);
+      api.jsonHal().follow('http://example.com/docs/rels/orders').get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -131,9 +129,11 @@ describe('The JSON-HAL walker\'s', function() {
     });
 
     it('should follow multiple links', function(done) {
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -145,12 +145,14 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow multiple links by full rel URLs (instead of curies)',
         function(done) {
-      api.follow(
+      api
+      .jsonHal()
+      .follow(
         'http://example.com/docs/rels/orders',
         'http://example.com/docs/rels/find',
         'http://example.com/docs/rels/customer')
-         .withTemplateParameters({ id: 13 })
-         .get(callback);
+      .withTemplateParameters({ id: 13 })
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -162,8 +164,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow first link from a link array automatically',
         function(done) {
-      api.follow('ea:orders', 'ea:admin')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:admin')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -175,8 +179,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow a link specified by index from a link array',
         function(done) {
-      api.follow('ea:orders', 'ea:admin[1]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:admin[1]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -188,8 +194,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow a link specified by secondary key (title)',
         function(done) {
-      api.follow('ea:orders', 'ea:admin[title:Kate]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:admin[title:Kate]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -201,8 +209,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow a link specified by secondary key (name)',
         function(done) {
-      api.follow('ea:orders', 'ea:admin[name:boss]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:admin[name:boss]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -214,8 +224,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow a link specified by full URL (instead of curie) and ' +
         'index', function(done) {
-      api.follow('ea:orders', 'http://example.com/docs/rels/admin[1]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'http://example.com/docs/rels/admin[1]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -227,8 +239,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow a link specified by full URL (instead of curie) and ' +
         'secondary key (title)', function(done) {
-      api.follow('ea:orders', 'http://example.com/docs/rels/admin[title:Kate]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'http://example.com/docs/rels/admin[title:Kate]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -240,8 +254,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should fail if there is no link with the specified secondary key',
         function(done) {
-      api.follow('ea:orders', 'ea:admin[name:not-existing]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:admin[name:not-existing]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -254,8 +270,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should fail if the link specified by secondary key has no href',
         function(done) {
-      api.follow('ea:orders', 'ea:admin[name:no-href]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:admin[name:no-href]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -269,8 +287,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should pass first embedded document from the array into the callback ' +
         ' automatically', function(done) {
-      api.follow('ea:orders', 'ea:order')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -288,8 +308,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should pass single element of an embedded document into the ' +
         'callback', function(done) {
-      api.follow('ea:orders', 'ea:order[1]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order[1]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -307,8 +329,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow first embedded resource from an array automatically',
         function(done) {
-      api.follow('ea:orders', 'ea:order', 'ea:basket')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order', 'ea:basket')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -320,8 +344,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow specified embedded resource from an array',
         function(done) {
-      api.follow('ea:orders', 'ea:order[1]', 'ea:basket')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order[1]', 'ea:basket')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -333,8 +359,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should yield the complete embedded array in the response',
         function(done) {
-      api.follow('ea:orders', 'ea:order[$all]')
-         .get(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order[$all]')
+      .get(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -354,9 +382,11 @@ describe('The JSON-HAL walker\'s', function() {
   describe('getResource method', function() {
 
     it('should return the resource', function(done) {
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .getResource(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .getResource(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -368,8 +398,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should yield the complete embedded array as a resource',
         function(done) {
-      api.follow('ea:orders', 'ea:order[$all]')
-         .getResource(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order[$all]')
+      .getResource(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -382,8 +414,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should pass an embedded document into the callback',
         function(done) {
-      api.follow('ea:orders', 'ea:order')
-         .getResource(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order')
+      .getResource(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -397,9 +431,11 @@ describe('The JSON-HAL walker\'s', function() {
   describe('getUri method', function() {
 
     it('should return the last URI', function(done) {
-      api.follow('ea:orders', 'ea:find')
-         .withTemplateParameters({ id: 13 })
-         .getUri(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find')
+      .withTemplateParameters({ id: 13 })
+      .getUri(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -411,8 +447,10 @@ describe('The JSON-HAL walker\'s', function() {
 
     // not sure what to do in this case
     it('returns the self-URI of an embedded document', function(done) {
-      api.follow('ea:orders', 'ea:order')
-         .getUri(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:order')
+      .getUri(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -424,9 +462,11 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('yields an error if the last URI is actually an embedded ' +
                ' resource but has no self-URI', function(done) {
-      api.follow('ea:orders', 'ea:find', 'ea:customer', 'ea:no_self_link')
-         .withTemplateParameters({ id: 13 })
-         .getUri(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer', 'ea:no_self_link')
+      .withTemplateParameters({ id: 13 })
+      .getUri(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -448,9 +488,11 @@ describe('The JSON-HAL walker\'s', function() {
       executeRequest.withArgs(customerUri, api.request, sinon.match.func,
           payload, sinon.match.func).callsArgWithAsync(4, null, updateResponse,
           customerUri);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .post(payload, callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .post(payload, callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -468,9 +510,11 @@ describe('The JSON-HAL walker\'s', function() {
       var err = new Error('test error');
       executeRequest.withArgs(customerUri, api.request, sinon.match.func,
           payload, sinon.match.func).callsArgWithAsync(4, err);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .post(payload, callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .post(payload, callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -488,9 +532,11 @@ describe('The JSON-HAL walker\'s', function() {
       executeRequest.withArgs(customerUri, api.request, sinon.match.func,
           payload, sinon.match.func).callsArgWithAsync(4, null, updateResponse,
           customerUri);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .put(payload, callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .put(payload, callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -508,9 +554,11 @@ describe('The JSON-HAL walker\'s', function() {
       var err = new Error('test error');
       executeRequest.withArgs(customerUri, api.request, sinon.match.func,
           payload, sinon.match.func).callsArgWithAsync(4, err);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .put(payload, callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .put(payload, callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -528,9 +576,11 @@ describe('The JSON-HAL walker\'s', function() {
       executeRequest.withArgs(customerUri, api.request, sinon.match.func,
           payload, sinon.match.func).callsArgWithAsync(4, null, updateResponse,
           customerUri);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .patch(payload, callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .patch(payload, callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -548,9 +598,11 @@ describe('The JSON-HAL walker\'s', function() {
       var err = new Error('test error');
       executeRequest.withArgs(customerUri, api.request, sinon.match.func,
           payload, sinon.match.func).callsArgWithAsync(4, err);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .patch(payload, callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .patch(payload, callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -568,9 +620,11 @@ describe('The JSON-HAL walker\'s', function() {
       executeRequest.withArgs(customerUri, api.request, sinon.match.func, null,
           sinon.match.func).callsArgWithAsync(4, null, updateResponse,
           customerUri);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .del(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .del(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -588,9 +642,11 @@ describe('The JSON-HAL walker\'s', function() {
       var err = new Error('test error');
       executeRequest.withArgs(customerUri, api.request, sinon.match.func, null,
           sinon.match.func).callsArgWithAsync(4, err);
-      api.follow('ea:orders', 'ea:find', 'ea:customer')
-         .withTemplateParameters({ id: 13 })
-         .del(callback);
+      api
+      .jsonHal()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .del(callback);
       waitFor(
         function() { return callback.called; },
         function() {

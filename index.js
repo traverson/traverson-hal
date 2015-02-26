@@ -2,8 +2,7 @@
 
 var halfred = require('halfred');
 
-function JsonHalAdapter(contentNegotiation, log) {
-  this.contentNegotiation = contentNegotiation;
+function JsonHalAdapter(log) {
   this.log = log;
 }
 

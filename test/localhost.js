@@ -37,8 +37,8 @@ describe('Traverson (when tested against a local server)', function() {
 
   beforeEach(function() {
     jsonHalApi = traverson
-      .jsonHal
       .from(rootUri)
+      .jsonHal()
       .newRequest()
       .withRequestOptions({
       headers: {

@@ -50,11 +50,12 @@ var JsonHalAdapter = require('traverson-hal');
 traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
 
 // use Traverson to follow links, as usual
-var api = traverson.jsonHal.from('http://api.io');
+var api = traverson.from('http://api.io');
 
-api.newRequest()
-   .follow('ht:me', 'ht:posts')
-   .getResource(function(error, document) {
+api
+.jsonHal()
+.follow('ht:me', 'ht:posts')
+.getResource(function(error, document) {
   if (error) {
     console.error('No luck :-)')
   } else {

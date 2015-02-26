@@ -1,23 +1,23 @@
-'use strict';
-
 (function() {
+  /* global TraversonJsonHalAdapter */
+  'use strict';
 
   // register HAL adapter in Traverson's media type registry
-  traverson.registerMediaType(
-    TraversonJsonHalAdapter.mediaType, TraversonJsonHalAdapter);
+  traverson.registerMediaType(TraversonJsonHalAdapter.mediaType,
+    TraversonJsonHalAdapter);
 
   // create a new Traverson instance to work with HAL
   var rootUri = '/';
-  var jsonHalApi = traverson.jsonHal.from(rootUri);
+  var api = traverson.from(rootUri);
 
   // HAL
   function executeHalRequest() {
     $('#json_hal_response').html('<img src="assets/spinner.gif"/>');
-    jsonHalApi
-        .newRequest()
-        .withRequestOptions({ headers: { 'accept': 'application/hal+json' } })
-        .follow('first', 'second', 'inside_second')
-        .getResource(function(err, resource) {
+    api
+    .jsonHal()
+    .withRequestOptions({ headers: { 'accept': 'application/hal+json' } })
+    .follow('first', 'second', 'inside_second')
+    .getResource(function(err, resource) {
       if (err) {
         $('#json_hal_response').html(JSON.stringify(err));
         return;
@@ -29,51 +29,16 @@
   $(document).ready(function () {
     $('#btn-hal').on('click', executeHalRequest);
     $('#general').html(
-      'traverson.registerMediaType(TraversonJsonHalAdapter.mediaType, TraversonJsonHalAdapter);<br/>' +
+      'traverson.registerMediaType(TraversonJsonHalAdapter.mediaType, ' +
+      'TraversonJsonHalAdapter);<br/>' +
       'var rootUri = \'' + rootUri + '\'<br/>' +
-      'var jsonHalApi = traverson.<i>jsonHal</i>.from(rootUri)<br/>'
-    );
-
-    // plain vanilla link following
-    $('#plain_vanilla_request').html(
-      'jsonApi.newRequest()<br/>' +
-      '.withRequestOptions({<br/>' +
-      '&nbsp;&nbsp;headers: { \'accept\': \'application/json\' }<br/>' +
-      '})<br/>' +
-      '.follow(\'second\', \'doc\')<br/>' +
-      '.getResource(function(err, resource) {<br/>' +
-      '&nbsp;&nbsp;// do something with the resource...<br/>' +
-      '})<br/>'
-    );
-
-    // JSONPath
-    $('#jsonpath_request').html(
-      'jsonApi.newRequest()<br/>' +
-      '.withRequestOptions({<br/>' +
-      '&nbsp;&nbsp;headers: { \'accept\': \'application/json\' }<br/>' +
-      '})<br/>' +
-      '.follow(\'$.jsonpath.nested.key\')<br/>' +
-      '.getResource(function(err, resource) {<br/>' +
-      '&nbsp;&nbsp;// do something with the resource...<br/>' +
-      '})<br/>'
-    );
-
-    // URI templates
-    $('#uri_template_request').html(
-      'jsonApi.newRequest()<br/>' +
-      '.withRequestOptions({<br/>' +
-      '&nbsp;&nbsp;headers: { \'accept\': \'application/json\' }<br/>' +
-      '})<br/>' +
-      '.follow(\'uri_template\')<br/>' +
-      '.withTemplateParameters({param: \'foobar\', id: 13})<br/>' +
-      '.getResource(function(err, resource) {<br/>' +
-      '&nbsp;&nbsp;// do something with the resource...<br/>' +
-      '})<br/>'
+      'var api = traverson.from(rootUri)<br/>'
     );
 
     // HAL
     $('#json_hal_request').html(
-      'jsonHalApi.newRequest()<br/>' +
+      'api<br/>' +
+      '.jsonHal()<br/>' +
       '.withRequestOptions({<br/>' +
       '&nbsp;&nbsp;headers: { \'accept\': \'application/hal+json\' }<br/>' +
       '})<br/>' +

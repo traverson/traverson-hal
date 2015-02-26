@@ -37,8 +37,8 @@
     "request": "^2.51.0",
     "sinon": "^1.9.1",
     "sinon-chai": "^2.5.0",
-    "traverson-mock-response": "^1.0.0",
-    "traverson-test-server": "^1.0.0"
+    "traverson-mock-response": "1.0.0",
+    "traverson-test-server": "1.0.1"
   },
   "engines": {
     "node": ">= 0.10.x"
