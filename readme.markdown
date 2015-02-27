@@ -63,7 +63,6 @@ api
     console.log(JSON.stringify(document))
   }
 });
-
 ```
 
 Working with HAL resources
@@ -173,7 +172,7 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
-* 1.0.0 2014-12-??: Initial release as a separate Traverson plug-in.
+* 1.0.0 2015-02-27 Initial release as a separate Traverson media type plug-in.
 
 License
 -------
