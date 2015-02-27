@@ -41,7 +41,7 @@ Installation
 Usage
 -----
 
-```
+```javascript
 // require traverson and traverson-hal
 var traverson = require('traverson');
 var JsonHalAdapter = require('traverson-hal');
@@ -50,9 +50,8 @@ var JsonHalAdapter = require('traverson-hal');
 traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
 
 // use Traverson to follow links, as usual
-var api = traverson.from('http://api.io');
-
-api
+traverson
+.from('http://api.io')
 .jsonHal()
 .follow('ht:me', 'ht:posts')
 .getResource(function(error, document) {
@@ -70,26 +69,28 @@ Working with HAL resources
 
 Here is a more thorough explanation of the introductory example:
 
-<pre>
+<pre lang="javascript">
 var traverson = require('traverson');
 var JsonHalAdapter = require('traverson-hal');
 
 // register the traverson-hal plug-in for media type 'application/hal+json'
 traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
 
-var api = traverson.<b>jsonHal</b>.from('http://haltalk.herokuapp.com/')
-
-api.newRequest()
-   .follow('ht:me', 'ht:posts')
-   .withTemplateParameters({name: 'traverson'})
-   .getResource(function(error, document) {
+traverson
+.from('http://haltalk.herokuapp.com/')
+<b>.jsonHal()</b>
+.withTemplateParameters({name: 'traverson'})
+.follow('ht:me', 'ht:posts')
+.getResource(function(error, document) {
   if (error) {
     console.error('No luck :-)')
   } else {
     console.log(JSON.stringify(document))
   }
 });
+</pre>
 
+```
 http://haltalk.herokuapp.com/
 {
   "_links": {
@@ -149,11 +150,11 @@ http://haltalk.herokuapp.com/users/traverson/posts
     ]
   }
 }
-</pre>
+```
 
-This will give you all posts that the account `traverson` posted to Mike Kelly's haltalk server. Note that we used `traverson.jsonHal` when creating the `api` object, instead of the usual `traverson.json`. When called in this way, Traverson will assume the resources it receives comply with the HAL specification and looks for links in the `_links` property. If there is no such link, traverson-hal will also look for an embedded resource with the given name.
+This will give you all posts that the account `traverson` posted to Mike Kelly's haltalk server. Note that we called `jsonHal()` on Traverson's request builder (the object returned from `traverson.from(...)` instead of the usual `traverson.from(...).json()`. When called in this way, Traverson will assume the resources it receives comply with the HAL specification and looks for links in the `_links` property. If there is no such link, traverson-hal will also look for an embedded resource with the given name. You can omit the method call to `jsonHal()` and rely on content type detection when you are sure that the server always sets the HTTP header `Content-Type: application/hal+json` in its responses. However, some HAL APIs use `Content-Type: application/json` in their responses although the return HAL resources.
 
-You can also pass strings like `'ht:post[name:foo]'` to the `follow` method to select links which share the same link relation by a secondary key. Because multiple links with the same link relation type are represented as an array of link objects in HAL, you can also use an array indexing notation like `'ht:post[1]'` to select an individual elements from an array of link objects. However, this is not recommended and should only be used as a last resort if the API does not provide a secondary key to select the correct link, because it relies on the ordering of the links as returned from the server, which might not be guaranteed to be always the same.
+You can also pass strings like `'ht:post[name:foo]'` to the `follow` method to select links (which share the same link relation) by a secondary key. Because multiple links with the same link relation type are represented as an array of link objects in HAL, you can also use an array indexing notation like `'ht:post[1]'` to select an individual elements from an array of link objects. However, this is not recommended and should only be used as a last resort if the API does not provide a secondary key to select the correct link, because it relies on the ordering of the links as returned from the server, which might not be guaranteed to be always the same.
 
 You can also use the array indexing notation `'ht:post[1]'` to target individual elements in an array of embedded resources.
 
