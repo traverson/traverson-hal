@@ -173,6 +173,7 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 1.1.0 2015-03-04 Update for Traverson release 1.1.0. Less restrictive peer dependency.
 * 1.0.0 2015-02-27 Initial release as a separate Traverson media type plug-in.
 
 License
