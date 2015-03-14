@@ -116,7 +116,7 @@ function findLinkBySecondaryKey(linkArray, parsedKey, log) {
               '] requested, but this link had no href attribute.');
         }
         log.debug('found hal link: ' + linkArray[i].href);
-        return { uri: linkArray[i].href };
+        return { url: linkArray[i].href };
       }
       /* jshint +W116 */
     }
@@ -140,7 +140,7 @@ function findLinkByIndex(linkArray, parsedKey, log) {
           '] requested, but this link had no href attribute.');
     }
     log.debug('found hal link: ' + linkArray[parsedKey.index].href);
-    return { uri: linkArray[parsedKey.index].href };
+    return { url: linkArray[parsedKey.index].href };
   }
   return null;
 }
@@ -162,7 +162,7 @@ function findLinkWithoutIndex(linkArray, parsedKey, log) {
           ', because it was the first that had a href attribute.');
     }
     log.debug('found hal link: ' + link.href);
-    return { uri: link.href };
+    return { url: link.href };
   }
   return null;
 }

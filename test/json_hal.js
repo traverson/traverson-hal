@@ -61,7 +61,6 @@ describe('The JSON-HAL walker\'s', function() {
   var put;
   var patch;
   var del;
-  var executeRequest;
 
   var callback;
   var api;
@@ -83,7 +82,7 @@ describe('The JSON-HAL walker\'s', function() {
     put = sinon.stub();
     patch = sinon.stub();
     del = sinon.stub();
-    api.walker.request = {
+    api.requestModuleInstance = {
       get: get,
       post: post,
       put: put,
@@ -119,12 +118,6 @@ describe('The JSON-HAL walker\'s', function() {
     .withArgs(customerUri, {}, sinon.match.func)
     .callsArgWithAsync(2, null, customerResponse);
     callback = sinon.spy();
-    executeRequest = sinon.stub(api.finalAction.constructor.prototype,
-        'executeRequest');
-  });
-
-  afterEach(function() {
-    api.finalAction.constructor.prototype.executeRequest.restore();
   });
 
   describe('get method', function() {
@@ -460,14 +453,14 @@ describe('The JSON-HAL walker\'s', function() {
     });
   });
 
-  describe('getUri method', function() {
+  describe('getUrl method', function() {
 
     it('should return the last URI', function(done) {
       api
       .newRequest()
       .follow('ea:orders', 'ea:find')
       .withTemplateParameters({ id: 13 })
-      .getUri(callback);
+      .getUrl(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -482,7 +475,7 @@ describe('The JSON-HAL walker\'s', function() {
       api
       .newRequest()
       .follow('ea:orders', 'ea:order')
-      .getUri(callback);
+      .getUrl(callback);
       waitFor(
         function() { return callback.called; },
         function() {
@@ -498,13 +491,13 @@ describe('The JSON-HAL walker\'s', function() {
       .newRequest()
       .follow('ea:orders', 'ea:find', 'ea:customer', 'ea:no_self_link')
       .withTemplateParameters({ id: 13 })
-      .getUri(callback);
+      .getUrl(callback);
       waitFor(
         function() { return callback.called; },
         function() {
           var error = callback.firstCall.args[0];
-          expect(error.message).to.contain('You requested an URI but the ' +
-              'last resource is an embedded resource and has no URI of its ' +
+          expect(error.message).to.contain('You requested an URL but the ' +
+              'last resource is an embedded resource and has no URL of its ' +
               'own (that is, it has no link with rel=\"self\"');
           done();
         }
@@ -517,10 +510,9 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow multiple links and post to the last URI',
         function(done) {
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, post, payload,
-        sinon.match.func)
-      .callsArgWithAsync(5, null, updateResponse, customerUri);
+      post
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, null, updateResponse);
 
       api
       .newRequest()
@@ -533,6 +525,9 @@ describe('The JSON-HAL walker\'s', function() {
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
               customerUri);
+          expect(post.firstCall.args[1].body).to.exist;
+          expect(post.firstCall.args[1].body).to.contain(payload.some);
+          expect(post.firstCall.args[1].body).to.contain(payload.data);
           done();
         }
       );
@@ -541,10 +536,9 @@ describe('The JSON-HAL walker\'s', function() {
     it('should call callback with err when post fails',
         function(done) {
       var err = new Error('test error');
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, post, payload,
-        sinon.match.func)
-      .callsArgWithAsync(5, err);
+      post
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, err);
 
       api
       .newRequest()
@@ -566,10 +560,9 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow multiple links and put to the last URI',
         function(done) {
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, put, payload,
-        sinon.match.func)
-      .callsArgWithAsync(5, null, updateResponse, customerUri);
+      put
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, null, updateResponse);
 
       api
       .newRequest()
@@ -582,6 +575,9 @@ describe('The JSON-HAL walker\'s', function() {
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
               customerUri);
+          expect(put.firstCall.args[1].body).to.exist;
+          expect(put.firstCall.args[1].body).to.contain(payload.some);
+          expect(put.firstCall.args[1].body).to.contain(payload.data);
           done();
         }
       );
@@ -590,10 +586,9 @@ describe('The JSON-HAL walker\'s', function() {
     it('should call callback with err when put fails',
         function(done) {
       var err = new Error('test error');
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, put, payload,
-        sinon.match.func)
-      .callsArgWithAsync(5, err);
+      put
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, err);
 
       api
       .newRequest()
@@ -615,10 +610,9 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow multiple links and patch the last URI',
         function(done) {
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, patch, payload,
-        sinon.match.func)
-      .callsArgWithAsync(5, null, updateResponse, customerUri);
+      patch
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, null, updateResponse);
       api
       .newRequest()
       .follow('ea:orders', 'ea:find', 'ea:customer')
@@ -629,6 +623,9 @@ describe('The JSON-HAL walker\'s', function() {
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
               customerUri);
+          expect(patch.firstCall.args[1].body).to.exist;
+          expect(patch.firstCall.args[1].body).to.contain(payload.some);
+          expect(patch.firstCall.args[1].body).to.contain(payload.data);
           done();
         }
       );
@@ -637,10 +634,9 @@ describe('The JSON-HAL walker\'s', function() {
     it('should call callback with err when patch fails',
         function(done) {
       var err = new Error('test error');
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, patch, payload,
-        sinon.match.func)
-      .callsArgWithAsync(5, err);
+      patch
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, err);
 
       api
       .newRequest()
@@ -662,10 +658,9 @@ describe('The JSON-HAL walker\'s', function() {
 
     it('should follow multiple links and delete the last URI',
         function(done) {
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, del, null,
-        sinon.match.func)
-      .callsArgWithAsync(5, null, updateResponse, customerUri);
+      del
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, null, updateResponse);
 
       api
       .newRequest()
@@ -686,10 +681,9 @@ describe('The JSON-HAL walker\'s', function() {
     it('should call callback with err when deleting fails',
         function(done) {
       var err = new Error('test error');
-      executeRequest
-      .withArgs(customerUri, sinon.match.object, {}, del, null,
-        sinon.match.func)
-      .callsArgWithAsync(5, err);
+      del
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, err);
 
       api
       .newRequest()
