@@ -160,7 +160,7 @@ You can also use the array indexing notation `'ht:post[1]'` to target individual
 
 #### Embedded Documents
 
-When working with HAL resources, for each link given to the `follow` method, traverson-hal checks the `_links` object. If the `_links` object does not have the property in question, traverson-hal also automatically checks the embedded document (the `_embedded` object). If there is an embedded document with the correct property key, this one will be used instead. If there is both a `_link` and an `_embedded` object with the same name, traverson-hal will always prefer the link, not the embedded object (reason: the spec says that an embedded resource may "be a full, partial, or inconsistent version of the representation served from the target URI", so to get the complete and up to date document your best bet is to follow the link to the actual resource, if available).
+When working with HAL resources, for each link given to the `follow` method, traverson-hal checks the `_links` object. If the `_links` object does not have the property in question, traverson-hal also automatically checks the embedded document (the `_embedded` object). If there is an embedded document with the correct property key, this one will be used instead. If there is both a `_link` and an `_embedded` object with the same name, traverson-hal will prefer the link by default, not the embedded object (reason: the spec says that an embedded resource may "be a full, partial, or inconsistent version of the representation served from the target URI", so to get the complete and up to date document your best bet is to follow the link to the actual resource, if available). This behaviour can be configured by calling `preferEmbeddedResources()` on the request builder object, which will make traverson-hal prefer the embedded resource over following a link.
 
 Link relations can denote a single embedded document as well as an array of embedded documents. Therefore, the same mechanisms that are used to select an individual link from an array of link objects can also be used with embedded arrays. That is, you can always use `'ht:post[name:foo]'` or `'ht:post[1]'`, no matter if the link relation is present in the `_links` object or in the `_embedded` object.
 
@@ -173,8 +173,14 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
-* 1.1.0 2015-03-04 Update for Traverson release 1.1.0. Less restrictive peer dependency.
-* 1.0.0 2015-02-27 Initial release as a separate Traverson media type plug-in.
+* 1.2.0 2015-03-15
+    * Update for Traverson release 1.2.0 (including change media type plug-in api, namely rename of `step.uri` to `step.url`).
+    * Added support for `preferEmbeddedResources()` to configure Traverson to prefer embedded resources over following links (#5).
+* 1.1.0 2015-03-04
+    * Update for Traverson release 1.1.0.
+    * Less restrictive peer dependency.
+* 1.0.0 2015-02-27
+    * Initial release as a separate Traverson media type plug-in.
 
 License
 -------

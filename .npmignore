@@ -1,2 +1,6 @@
 *.un~
-browser/dist
+*.swp
+.travis.yml
+disc.html
+test
+browser/test/browserified_tests.js
