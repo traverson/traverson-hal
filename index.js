@@ -8,24 +8,32 @@ function JsonHalAdapter(log) {
 
 JsonHalAdapter.mediaType = 'application/hal+json';
 
-JsonHalAdapter.prototype.findNextStep = function(doc, key) {
+// TODO Pass the traversal state into the adapter... and possibly also only
+// modify it, do not return anything.
+JsonHalAdapter.prototype.findNextStep = function(doc, key, preferEmbedded) {
   this.log.debug('parsing hal');
   var halResource = halfred.parse(doc);
 
   var parsedKey = parseKey(key);
   resolveCurie(halResource, parsedKey);
 
-  // try _links first
-  var step = findLink(halResource, parsedKey, this.log);
+  // _links first
+  var linkStep = findLink(halResource, parsedKey, this.log);
+
+  // check for _embedded
+  var embeddedStep = findEmbedded(halResource, doc, parsedKey, this.log);
+
+  var step;
+  if (preferEmbedded) {
+    step = embeddedStep || linkStep;
+  } else {
+    step = linkStep || embeddedStep;
+  }
+
   if (step) {
     return step;
   }
 
-  // no link found, check for _embedded
-  step = findEmbedded(halResource, doc, parsedKey, this.log);
-  if (step) {
-    return step;
-  }
   throw new Error('Could not find a link nor an embedded object for ' +
       JSON.stringify(parsedKey) + ' in document:\n' + JSON.stringify(doc));
 };

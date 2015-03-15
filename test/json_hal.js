@@ -24,6 +24,9 @@ describe('The JSON-HAL walker\'s', function() {
   var admin2Doc = halDocs.admin2;
   var admin5Uri = rootUri + '/admins/5';
   var admin5Doc = halDocs.admin5;
+  var embeddedAdminsDoc = halDocs.embeddedAdmins;
+  var admin2EmbeddedDoc = embeddedAdminsDoc[0];
+  var admin5EmbeddedDoc = embeddedAdminsDoc[1];
   var basketDoc = halDocs.basket;
   var basket1Uri = rootUri + '/baskets/987';
   var basket1Doc = halDocs.basket1;
@@ -420,6 +423,38 @@ describe('The JSON-HAL walker\'s', function() {
         }
       );
     });
+
+    it('should prefer links per default (over embedded resources)',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:admin')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin2Doc);
+          done();
+        }
+      );
+    });
+
+    it('should prefer embedded resources over links if configured',
+        function(done) {
+      api
+      .newRequest()
+      .preferEmbeddedResources()
+      .follow('ea:orders', 'ea:admin')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin2EmbeddedDoc);
+          done();
+        }
+      );
+    });
+
 
     it('should yield the complete embedded array as a resource',
         function(done) {

@@ -29,6 +29,18 @@ var embeddedWithoutSelfLink = {
   },
 };
 
+var embeddedAdmins = [{
+  '_links': {
+    'self': { 'href': '/admins/2' }
+  },
+  'name': 'Freddy'
+}, {
+  '_links': {
+    'self': { 'href': '/admins/5' }
+  },
+  'name': 'Catharina'
+}];
+
 module.exports = {
   root: {
     '_links': {
@@ -40,6 +52,8 @@ module.exports = {
   },
 
   embeddedOrders: embeddedOrders,
+
+  embeddedAdmins: embeddedAdmins,
 
   orders: {
     '_links': {
@@ -62,7 +76,8 @@ module.exports = {
     'currentlyProcessing': 14,
     'shippedToday': 20,
     '_embedded': {
-      'ea:order': embeddedOrders
+      'ea:order': embeddedOrders,
+      'ea:admin': embeddedAdmins, // to test preferEmbedded
     }
   },
 
