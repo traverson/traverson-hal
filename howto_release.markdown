@@ -3,8 +3,10 @@
 To release version x.y.z:
 
 - Update release notes
+- bump version of peer dependency *AND* devDependency for traverson in package.json to latest
 - bump version in package.json to x.y.z
 - bump version in bower.json to x.y.z
+- npm install
 - `grunt` (to create a fresh browser build, also make sure all tests pass etc.)
 - First release? Then `bower register package-name git://github.com/user/repo.git`
 - `git commit -am"release x.y.z" && git push`
