@@ -559,7 +559,7 @@ describe('The JSON-HAL walker\'s', function() {
         function() { return callback.called; },
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
-              customerUri);
+              sinon.match.object);
           expect(post.firstCall.args[1].body).to.exist;
           expect(post.firstCall.args[1].body).to.contain(payload.some);
           expect(post.firstCall.args[1].body).to.contain(payload.data);
@@ -609,7 +609,7 @@ describe('The JSON-HAL walker\'s', function() {
         function() { return callback.called; },
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
-              customerUri);
+              sinon.match.object);
           expect(put.firstCall.args[1].body).to.exist;
           expect(put.firstCall.args[1].body).to.contain(payload.some);
           expect(put.firstCall.args[1].body).to.contain(payload.data);
@@ -657,7 +657,7 @@ describe('The JSON-HAL walker\'s', function() {
         function() { return callback.called; },
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
-              customerUri);
+              sinon.match.object);
           expect(patch.firstCall.args[1].body).to.exist;
           expect(patch.firstCall.args[1].body).to.contain(payload.some);
           expect(patch.firstCall.args[1].body).to.contain(payload.data);
@@ -701,13 +701,13 @@ describe('The JSON-HAL walker\'s', function() {
       .newRequest()
       .follow('ea:orders', 'ea:find', 'ea:customer')
       .withTemplateParameters({ id: 13 })
-      .del(callback);
+      .delete(callback);
 
       waitFor(
         function() { return callback.called; },
         function() {
           expect(callback).to.have.been.calledWith(null, updateResponse,
-              customerUri);
+              sinon.match.object);
           done();
         }
       );

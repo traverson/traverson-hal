@@ -173,6 +173,8 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 2.0.0 2015-04-07
+    * Update for Traverson release 2.0.0 (including `traversal.continue()`)
 * 1.2.0 2015-03-15
     * Update for Traverson release 1.2.0 (including change media type plug-in api, namely rename of `step.uri` to `step.url`).
     * Added support for `preferEmbeddedResources()` to configure Traverson to prefer embedded resources over following links (#5).
