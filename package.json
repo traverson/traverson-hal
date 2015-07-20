@@ -4,6 +4,7 @@
   "author": "Bastian Krol",
   "description": "HAL (hypertext application language) adapter for Traverson",
   "repository": "https://github.com/basti1302/traverson-hal.git",
+  "license": "MIT",
   "scripts": {
     "test": "grunt"
   },
@@ -39,7 +40,10 @@
     "sinon-chai": "^2.5.0",
     "traverson": "^2.0.0",
     "traverson-mock-response": "1.0.0",
-    "traverson-test-server": "1.0.1"
+    "traverson-test-server": "1.4.0"
+  },
+  "browser": {
+    "traverson-test-server": false
   },
   "engines": {
     "node": ">= 0.10.x"
