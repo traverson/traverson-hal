@@ -355,6 +355,27 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
+    it('should pass matched embedded document from the array into the ' +
+        'callback', function(done) {
+      api
+        .newRequest()
+        .follow('ea:orders', 'ea:order[total:20.00]')
+        .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var error = callback.firstCall.args[0];
+          expect(error).to.not.exist;
+          var response = callback.firstCall.args[1];
+          expect(response).to.exist;
+          expect(response.body).to.equal(embeddedOrderResponses[1].body);
+          expect(response.statusCode).to.equal(200);
+          expect(response.remark).to.exist;
+          done();
+        }
+      );
+    });
+
     it('should follow first embedded resource from an array automatically',
         function(done) {
       api

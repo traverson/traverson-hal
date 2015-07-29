@@ -186,8 +186,12 @@ function findEmbedded(halResource, doc, parsedKey, log) {
   }
   log.debug('Found an array of embedded resource for: ' + parsedKey.key);
 
-  var step =
-    findeEmbeddedByIndexOrAll(resourceArray, parsedKey, halResource, log);
+
+  var step = findEmbeddedBySecondaryKey(resourceArray, parsedKey, log);
+  if (!step) {
+    step =
+      findeEmbeddedByIndexOrAll(resourceArray, parsedKey, halResource, log);
+  }
   if (!step) {
     step = findEmbeddedSimple(resourceArray, parsedKey, log);
   }
@@ -220,6 +224,35 @@ function findEmbeddedSimple(resourceArray, parsedKey, log) {
         ' for key ' + parsedKey.key + ', arbitrarily choosing first element.');
   }
   return { doc: resourceArray[0].original() };
+}
+
+function findEmbeddedBySecondaryKey(embeddedArray, parsedKey, log) {
+  if (parsedKey.secondaryKey &&
+    parsedKey.secondaryValue) {
+
+    // client selected a specific embed by an explicit secondary key,
+    // so use it or fail
+    var i = 0;
+    for (; i < embeddedArray.length; i++) {
+      var val = embeddedArray[i][parsedKey.secondaryKey];
+      /* jshint -W116 */
+      if (val != null && val == parsedKey.secondaryValue) {
+        var self = embeddedArray[i]._links.self[0].href;
+        if (!self) {
+          throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
+            parsedKey.secondaryValue +
+            '] requested, but this embed had no href attribute.');
+        }
+        log.debug('found hal link: ' + self);
+        return { url: self };
+      }
+      /* jshint +W116 */
+    }
+    throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
+      parsedKey.secondaryValue +
+      '] requested, but there is no such embed.');
+  }
+  return null;
 }
 
 module.exports = JsonHalAdapter;
