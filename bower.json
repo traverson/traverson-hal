@@ -1,7 +1,7 @@
 {
   "name": "traverson-hal",
   "main": "browser/dist/traverson-hal.js",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "homepage": "https://github.com/basti1302/traverson-hal",
   "authors": [
     "Bastian Krol <bastian.krol@web.de>"
