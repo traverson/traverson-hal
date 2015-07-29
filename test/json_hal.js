@@ -220,6 +220,25 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
+    it('should fail if a link specified by index is not available',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:admin[7]')
+      .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var err = callback.firstCall.args[0];
+          expect(err).to.exist;
+          expect(err.message).to.contain('Error while resolving linked ' +
+            'documents: The link array ea:admin exists, but has no element ' +
+            'at index 7.');
+          done();
+        }
+      );
+    });
+
     it('should follow a link specified by secondary key (title)',
         function(done) {
       api
@@ -240,36 +259,6 @@ describe('The JSON-HAL walker\'s', function() {
       api
       .newRequest()
       .follow('ea:orders', 'ea:admin[name:boss]')
-      .get(callback);
-      waitFor(
-        function() { return callback.called; },
-        function() {
-          expect(callback).to.have.been.calledWith(null, admin5Response);
-          done();
-        }
-      );
-    });
-
-    it('should follow a link specified by full URL (instead of curie) and ' +
-        'index', function(done) {
-      api
-      .newRequest()
-      .follow('ea:orders', 'http://example.com/docs/rels/admin[1]')
-      .get(callback);
-      waitFor(
-        function() { return callback.called; },
-        function() {
-          expect(callback).to.have.been.calledWith(null, admin5Response);
-          done();
-        }
-      );
-    });
-
-    it('should follow a link specified by full URL (instead of curie) and ' +
-        'secondary key (title)', function(done) {
-      api
-      .newRequest()
-      .follow('ea:orders', 'http://example.com/docs/rels/admin[title:Kate]')
       .get(callback);
       waitFor(
         function() { return callback.called; },
@@ -306,8 +295,39 @@ describe('The JSON-HAL walker\'s', function() {
         function() { return callback.called; },
         function() {
           var err = callback.firstCall.args[0];
-          expect(err.message).to.contain(
-              'but this link had no href attribute.');
+          expect(err.message).to.contain('Error while resolving linked ' +
+            'documents: The link ea:admin[name:no-href] exists, but it has ' +
+            'no href attribute.');
+          done();
+        }
+      );
+    });
+
+    it('should follow a link specified by full URL (instead of curie) and ' +
+        'index', function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'http://example.com/docs/rels/admin[1]')
+      .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin5Response);
+          done();
+        }
+      );
+    });
+
+    it('should follow a link specified by full URL (instead of curie) and ' +
+        'secondary key (title)', function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'http://example.com/docs/rels/admin[title:Kate]')
+      .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin5Response);
           done();
         }
       );
@@ -354,6 +374,25 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
+    it('should fail if there is no embedded element with the specified index',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:order[7]')
+      .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var error = callback.firstCall.args[0];
+          expect(error).to.exist;
+          expect(error.message).to.contain('Error while resolving embedded ' +
+            'documents: The embedded array ea:order exists, but has no ' +
+            'element at index 7.');
+          done();
+        }
+      );
+    });
+
     it('should select a single embedded element by secondary key',
         function(done) {
       api
@@ -370,6 +409,24 @@ describe('The JSON-HAL walker\'s', function() {
           expect(response.body).to.equal(embeddedOrderResponses[1].body);
           expect(response.statusCode).to.equal(200);
           expect(response.remark).to.exist;
+          done();
+        }
+      );
+    });
+
+    it('should fail if there is no embedded element with the specified index',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:order[status:does-not-exist]')
+      .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var error = callback.firstCall.args[0];
+          expect(error).to.exist;
+          expect(error.message).to.contain('ea:order[status:does-not-exist] ' +
+            'requested, but the embedded array ea:order has no such element.');
           done();
         }
       );

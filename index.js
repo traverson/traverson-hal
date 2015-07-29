@@ -12,148 +12,162 @@ JsonHalAdapter.mediaType = 'application/hal+json';
 // modify it, do not return anything.
 JsonHalAdapter.prototype.findNextStep = function(doc, key, preferEmbedded) {
   this.log.debug('parsing hal');
-  var halResource = halfred.parse(doc);
+  var ctx = {
+    doc: doc,
+    halResource: halfred.parse(doc),
+    parsedKey: parseKey(key),
+    linkStep: null,
+    embeddedStep: null,
+  };
+  resolveCurie(ctx);
+  findLink(ctx, this.log);
+  findEmbedded(ctx, this.log);
+  return prepareResult(ctx, key, preferEmbedded);
+};
 
-  var parsedKey = parseKey(key);
-  resolveCurie(halResource, parsedKey);
-
-  // _links first
-  var linkStep = findLink(halResource, parsedKey, this.log);
-
-  // check for _embedded
-  var embeddedStep = findEmbedded(halResource, doc, parsedKey, this.log);
-
+function prepareResult(ctx, key, preferEmbedded) {
   var step;
-  if (preferEmbedded) {
-    step = embeddedStep || linkStep;
+  if (preferEmbedded || ctx.parsedKey.mode === 'all') {
+    step = ctx.embeddedStep || ctx.linkStep;
   } else {
-    step = linkStep || embeddedStep;
+    step = ctx.linkStep || ctx.embeddedStep;
   }
 
   if (step) {
     return step;
-  }
+  } else {
+    var message = 'Could not find a matching link nor an embedded document '+
+      'for ' + key + '.';
+    if (ctx.linkError) {
+      message += ' Error while resolving linked documents: ' + ctx.linkError;
+    }
+    if (ctx.embeddedError) {
+      message += ' Error while resolving embedded documents: ' +
+        ctx.embeddedError;
+    }
+    message += ' Document: ' + JSON.stringify(ctx.doc);
 
-  throw new Error('Could not find a link nor an embedded object for ' +
-      JSON.stringify(parsedKey) + ' in document:\n' + JSON.stringify(doc));
-};
+    throw new Error(message);
+  }
+}
 
 function parseKey(key) {
   var match = key.match(/(.*)\[(.*):(.*)\]/);
-  // ea:admin[title:Kate] => access by secondary attribute
+  // ea:admin[title:Kate] => access by secondary key
   if (match) {
     return {
+      mode: 'secondary',
       key: match[1],
       secondaryKey: match[2],
       secondaryValue: match[3],
       index: null,
-      all: false,
     };
   }
   // ea:order[3] => index access into embedded array
   match = key.match(/(.*)\[(\d+)\]/);
   if (match) {
     return {
+      mode: 'index',
       key: match[1],
       secondaryKey: null,
       secondaryValue: null,
       index: match[2],
-      all: false,
     };
   }
   // ea:order[$all] => meta-key, return full array
   match = key.match(/(.*)\[\$all\]/);
   if (match) {
     return {
+      mode: 'all',
       key: match[1],
       secondaryKey: null,
       secondaryValue: null,
       index: null,
-      all: true,
     };
   }
   // ea:order => simple link relation
   return {
+    mode: 'first',
     key: key,
     secondaryKey: null,
     secondaryValue: null,
     index: null,
-    all: false,
   };
 }
 
-function resolveCurie(halResource, parsedKey) {
-  if (halResource.hasCuries()) {
-    parsedKey.curie = halResource.reverseResolveCurie(parsedKey.key);
+function resolveCurie(ctx) {
+  if (ctx.halResource.hasCuries()) {
+    ctx.parsedKey.curie =
+      ctx.halResource.reverseResolveCurie(ctx.parsedKey.key);
   }
 }
 
-function findLink(halResource, parsedKey, log) {
-  var linkArray = halResource.linkArray(parsedKey.key);
+function findLink(ctx, log) {
+  var linkArray = ctx.halResource.linkArray(ctx.parsedKey.key);
   if (!linkArray) {
-    linkArray = halResource.linkArray(parsedKey.curie);
+    linkArray = ctx.halResource.linkArray(ctx.parsedKey.curie);
   }
   if (!linkArray || linkArray.length === 0) {
-    return null;
+    return;
   }
 
-  var step = findLinkBySecondaryKey(linkArray, parsedKey, log);
-  if (!step) {
-    step = findLinkByIndex(linkArray, parsedKey, log);
+  switch (ctx.parsedKey.mode) {
+    case 'secondary':
+      findLinkBySecondaryKey(ctx, linkArray, log);
+      break;
+    case 'index':
+      findLinkByIndex(ctx, linkArray, log);
+      break;
+    case 'first':
+      findLinkWithoutIndex(ctx, linkArray, log);
+      break;
+    default:
+      throw new Error('Illegal mode: ' + ctx.parsedKey.mode);
   }
-  if (!step) {
-    step = findLinkWithoutIndex(linkArray, parsedKey, log);
-  }
-  return step;
 }
 
-function findLinkBySecondaryKey(linkArray, parsedKey, log) {
-  if (parsedKey.secondaryKey &&
-      parsedKey.secondaryValue) {
-
-    // client selected a specific link by an explicit secondary key like 'name',
-    // so use it or fail
-    var i = 0;
-    for (; i < linkArray.length; i++) {
-      var val = linkArray[i][parsedKey.secondaryKey];
-      /* jshint -W116 */
-      if (val != null && val == parsedKey.secondaryValue) {
-        if (!linkArray[i].href) {
-          throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
-              parsedKey.secondaryValue +
-              '] requested, but this link had no href attribute.');
-        }
-        log.debug('found hal link: ' + linkArray[i].href);
-        return { url: linkArray[i].href };
+function findLinkBySecondaryKey(ctx, linkArray, log) {
+  // client selected a specific link by an explicit secondary key like 'name',
+  // so use it or fail
+  var i = 0;
+  for (; i < linkArray.length; i++) {
+    var val = linkArray[i][ctx.parsedKey.secondaryKey];
+    /* jshint -W116 */
+    if (val != null && val == ctx.parsedKey.secondaryValue) {
+      if (!linkArray[i].href) {
+        ctx.linkError = 'The link ' + ctx.parsedKey.key + '[' +
+          ctx.parsedKey.secondaryKey + ':' + ctx.parsedKey.secondaryValue +
+            '] exists, but it has no href attribute.';
+        return;
       }
-      /* jshint +W116 */
+      log.debug('found hal link: ' + linkArray[i].href);
+      ctx.linkStep = { url: linkArray[i].href };
+      return;
     }
-    throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
-        parsedKey.secondaryValue +
-       '] requested, but there is no such link.');
+    /* jshint +W116 */
   }
-  return null;
+  ctx.linkError = ctx.parsedKey.key + '[' + ctx.parsedKey.secondaryKey + ':' +
+      ctx.parsedKey.secondaryValue +
+     '] requested, but there is no such link.';
 }
 
-function findLinkByIndex(linkArray, parsedKey, log) {
-  if (typeof parsedKey.index !== 'undefined' && parsedKey.index !== null) {
-    // client specified an explicit array index for this link, so use it or fail
-    if (!linkArray[parsedKey.index]) {
-      throw new Error(parsedKey.key + '[' + parsedKey.index +
-          '] requested, but link array ' + parsedKey.key +
-          ' had no element at index ' + parsedKey.index);
-    }
-    if (!linkArray[parsedKey.index].href) {
-      throw new Error(parsedKey.key + '[' + parsedKey.index +
-          '] requested, but this link had no href attribute.');
-    }
-    log.debug('found hal link: ' + linkArray[parsedKey.index].href);
-    return { url: linkArray[parsedKey.index].href };
+function findLinkByIndex(ctx, linkArray, log) {
+  // client specified an explicit array index for this link, so use it or fail
+  if (!linkArray[ctx.parsedKey.index]) {
+    ctx.linkError = 'The link array ' + ctx.parsedKey.key +
+        ' exists, but has no element at index ' + ctx.parsedKey.index + '.';
+    return;
   }
-  return null;
+  if (!linkArray[ctx.parsedKey.index].href) {
+    ctx.linkError = 'The link ' + ctx.parsedKey.key + '[' +
+      ctx.parsedKey.index + '] exists, but it has no href attribute.';
+    return;
+  }
+  log.debug('found hal link: ' + linkArray[ctx.parsedKey.index].href);
+  ctx.linkStep = { url: linkArray[ctx.parsedKey.index].href };
 }
 
-function findLinkWithoutIndex(linkArray, parsedKey, log) {
+function findLinkWithoutIndex(ctx, linkArray, log) {
   // client did not specify an array index for this link, arbitrarily choose
   // the first that has a href attribute
   var link;
@@ -166,87 +180,91 @@ function findLinkWithoutIndex(linkArray, parsedKey, log) {
   if (link) {
     if (linkArray.length > 1) {
       log.warn('Found HAL link array with more than one element for ' +
-          'key ' + parsedKey.key + ', arbitrarily choosing index ' + index +
+          'key ' + ctx.parsedKey.key + ', arbitrarily choosing index ' + index +
           ', because it was the first that had a href attribute.');
     }
     log.debug('found hal link: ' + link.href);
-    return { url: link.href };
+    ctx.linkStep = { url: link.href };
   }
-  return null;
 }
 
-function findEmbedded(halResource, doc, parsedKey, log) {
-  log.debug('checking for embedded: ' + parsedKey.key +
-      (parsedKey.index ? parsedKey.index : ''));
+function findEmbedded(ctx, log) {
+  log.debug('checking for embedded: ' + ctx.parsedKey.key +
+      (ctx.parsedKey.index ? ctx.parsedKey.index : ''));
 
-  var resourceArray = halResource.embeddedArray(parsedKey.key);
+  var resourceArray = ctx.halResource.embeddedArray(ctx.parsedKey.key);
   if (!resourceArray || resourceArray.length === 0) {
     return null;
   }
-  log.debug('Found an array of embedded resource for: ' + parsedKey.key);
+  log.debug('Found an array of embedded resource for: ' + ctx.parsedKey.key);
 
-
-  var step = findEmbeddedBySecondaryKey(resourceArray, parsedKey, log);
-  if (!step) {
-    step =
-      findeEmbeddedByIndexOrAll(resourceArray, parsedKey, halResource, log);
+  switch (ctx.parsedKey.mode) {
+    case 'secondary':
+      findEmbeddedBySecondaryKey(ctx, resourceArray, log);
+      break;
+    case 'index':
+      findEmbeddedByIndex(ctx, resourceArray, log);
+      break;
+    case 'all':
+      findEmbeddedAll(ctx);
+      break;
+    case 'first':
+      findEmbeddedWithoutIndex(ctx, resourceArray, log);
+      break;
+    default:
+      throw new Error('Illegal mode: ' + ctx.parsedKey.mode);
   }
-  if (!step) {
-    step = findEmbeddedSimple(resourceArray, parsedKey, log);
-  }
-  return step;
 }
 
-function findeEmbeddedByIndexOrAll(resourceArray, parsedKey, parentResource,
-    log) {
-  if (parsedKey.all) {
-    return { doc: parentResource.original()._embedded[parsedKey.key] };
-  } else if (parsedKey.index) {
-    // client specified an explicit array index, so use it or fail
-    if (!resourceArray[parsedKey.index]) {
-      throw new Error(parsedKey.key + '[' + parsedKey.index +
-          '] requested, but there is no such link. However, there is an ' +
-          'embedded resource array named ' + parsedKey.key +
-          ' but it does not have an element at index ' + parsedKey.index);
+function findEmbeddedBySecondaryKey(ctx, embeddedArray, log) {
+  // client selected a specific embed by an explicit secondary key,
+  // so use it or fail
+  var i = 0;
+  for (; i < embeddedArray.length; i++) {
+    var val = embeddedArray[i][ctx.parsedKey.secondaryKey];
+    /* jshint -W116 */
+    if (val != null && val == ctx.parsedKey.secondaryValue) {
+      log.debug('Found an embedded resource for: ' + ctx.parsedKey.key + '[' +
+      ctx.parsedKey.secondaryKey + ':' + ctx.parsedKey.secondaryValue + ']');
+      ctx.embeddedStep = { doc: embeddedArray[i].original() };
+      return;
     }
-    log.debug('Found an embedded resource for: ' + parsedKey.key + '[' +
-        parsedKey.index + ']');
-    return { doc: resourceArray[parsedKey.index].original() };
+    /* jshint +W116 */
   }
-  return null;
+  ctx.embeddedError = ctx.parsedKey.key + '[' + ctx.parsedKey.secondaryKey +
+    ':' + ctx.parsedKey.secondaryValue +
+    '] requested, but the embedded array ' + ctx.parsedKey.key +
+    ' has no such element.';
 }
 
-function findEmbeddedSimple(resourceArray, parsedKey, log) {
+function findEmbeddedByIndex(ctx, resourceArray, log) {
+  // client specified an explicit array index, so use it or fail
+  if (!resourceArray[ctx.parsedKey.index]) {
+    ctx.embeddedError = 'The embedded array ' + ctx.parsedKey.key +
+      ' exists, but has no element at index ' + ctx.parsedKey.index + '.';
+    return;
+  }
+  log.debug('Found an embedded resource for: ' + ctx.parsedKey.key + '[' +
+      ctx.parsedKey.index + ']');
+  ctx.embeddedStep = {
+    doc: resourceArray[ctx.parsedKey.index].original()
+  };
+}
+
+function findEmbeddedAll(ctx) {
+  ctx.embeddedStep = {
+    doc: ctx.halResource.original()._embedded[ctx.parsedKey.key]
+  };
+}
+
+function findEmbeddedWithoutIndex(ctx, resourceArray, log) {
   // client did not specify an array index, arbitrarily choose first
   if (resourceArray.length > 1) {
     log.warn('Found HAL embedded resource array with more than one element ' +
-        ' for key ' + parsedKey.key + ', arbitrarily choosing first element.');
+      ' for key ' + ctx.parsedKey.key +
+      ', arbitrarily choosing first element.');
   }
-  return { doc: resourceArray[0].original() };
-}
-
-function findEmbeddedBySecondaryKey(embeddedArray, parsedKey, log) {
-  if (parsedKey.secondaryKey &&
-    parsedKey.secondaryValue) {
-
-    // client selected a specific embed by an explicit secondary key,
-    // so use it or fail
-    var i = 0;
-    for (; i < embeddedArray.length; i++) {
-      var val = embeddedArray[i][parsedKey.secondaryKey];
-      /* jshint -W116 */
-      if (val != null && val == parsedKey.secondaryValue) {
-        log.debug('Found an embedded resource for: ' + parsedKey.key + '[' +
-        parsedKey.secondaryKey + ':' + parsedKey.secondaryValue + ']');
-        return { doc: embeddedArray[i].original() };
-      }
-      /* jshint +W116 */
-    }
-    throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
-      parsedKey.secondaryValue +
-      '] requested, but there is no such link/embedded document.');
-  }
-  return null;
+  ctx.embeddedStep = { doc: resourceArray[0].original() };
 }
 
 module.exports = JsonHalAdapter;
