@@ -354,7 +354,7 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
-    it.only('should select a single embedded element by secondary key',
+    it('should select a single embedded element by secondary key',
         function(done) {
       api
       .newRequest()

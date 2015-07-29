@@ -175,7 +175,6 @@ function findLinkWithoutIndex(linkArray, parsedKey, log) {
   return null;
 }
 
-
 function findEmbedded(halResource, doc, parsedKey, log) {
   log.debug('checking for embedded: ' + parsedKey.key +
       (parsedKey.index ? parsedKey.index : ''));
@@ -237,20 +236,15 @@ function findEmbeddedBySecondaryKey(embeddedArray, parsedKey, log) {
       var val = embeddedArray[i][parsedKey.secondaryKey];
       /* jshint -W116 */
       if (val != null && val == parsedKey.secondaryValue) {
-        var self = embeddedArray[i]._links.self[0].href;
-        if (!self) {
-          throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
-            parsedKey.secondaryValue +
-            '] requested, but this embed had no href attribute.');
-        }
-        log.debug('found hal link: ' + self);
-        return { url: self };
+        log.debug('Found an embedded resource for: ' + parsedKey.key + '[' +
+        parsedKey.secondaryKey + ':' + parsedKey.secondaryValue + ']');
+        return { doc: embeddedArray[i].original() };
       }
       /* jshint +W116 */
     }
     throw new Error(parsedKey.key + '[' + parsedKey.secondaryKey + ':' +
       parsedKey.secondaryValue +
-      '] requested, but there is no such embed.');
+      '] requested, but there is no such link/embedded document.');
   }
   return null;
 }
