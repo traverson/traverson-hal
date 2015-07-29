@@ -375,7 +375,6 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
-
     it('should follow first embedded resource from an array automatically',
         function(done) {
       api
