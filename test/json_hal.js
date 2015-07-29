@@ -334,8 +334,7 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
-    it('should pass single element of an embedded document into the ' +
-        'callback', function(done) {
+    it('should select a single embedded element by index', function(done) {
       api
       .newRequest()
       .follow('ea:orders', 'ea:order[1]')
@@ -354,6 +353,28 @@ describe('The JSON-HAL walker\'s', function() {
         }
       );
     });
+
+    it.only('should select a single embedded element by secondary key',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:order[status:processing]')
+      .get(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var error = callback.firstCall.args[0];
+          expect(error).to.not.exist;
+          var response = callback.firstCall.args[1];
+          expect(response).to.exist;
+          expect(response.body).to.equal(embeddedOrderResponses[1].body);
+          expect(response.statusCode).to.equal(200);
+          expect(response.remark).to.exist;
+          done();
+        }
+      );
+    });
+
 
     it('should follow first embedded resource from an array automatically',
         function(done) {
