@@ -33,11 +33,13 @@ var embeddedAdmins = [{
   '_links': {
     'self': { 'href': '/admins/2' }
   },
+  'title': 'Fred',
   'name': 'Freddy'
 }, {
   '_links': {
     'self': { 'href': '/admins/5' }
   },
+  'title': 'Kate',
   'name': 'Catharina'
 }];
 

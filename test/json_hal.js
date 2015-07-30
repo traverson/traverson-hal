@@ -532,6 +532,69 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
+    it('should prefer links per default by index',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:admin[1]')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin5Doc);
+          done();
+        }
+      );
+    });
+
+    it('should prefer embedded resources over links if configured by index',
+        function(done) {
+      api
+      .newRequest()
+      .preferEmbeddedResources()
+      .follow('ea:orders', 'ea:admin[1]')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin5EmbeddedDoc);
+          done();
+        }
+      );
+    });
+
+    it('should prefer links per default by secondary key',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:admin[title:Kate]')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin5Doc);
+          done();
+        }
+      );
+    });
+
+    it('should prefer embedded resources over links if configured by ' +
+        'secondary key', function(done) {
+      api
+      .newRequest()
+      .preferEmbeddedResources()
+      .follow('ea:orders', 'ea:admin[1]')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, admin5EmbeddedDoc);
+          done();
+        }
+      );
+    });
+
+
 
     it('should yield the complete embedded array as a resource',
         function(done) {
