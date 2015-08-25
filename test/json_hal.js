@@ -594,8 +594,6 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
-
-
     it('should yield the complete embedded array as a resource',
         function(done) {
       api
