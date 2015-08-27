@@ -18,7 +18,7 @@
     "HAL"
   ],
   "peerDependencies": {
-    "traverson": "^2.0.1"
+    "traverson": "^2.1.0"
   },
   "dependencies": {
     "halfred": "0.4.0"
@@ -38,7 +38,7 @@
     "request": "^2.51.0",
     "sinon": "^1.9.1",
     "sinon-chai": "^2.5.0",
-    "traverson": "^2.0.1",
+    "traverson": "^2.1.0",
     "traverson-mock-response": "1.0.0",
     "traverson-test-server": "1.4.0"
   },

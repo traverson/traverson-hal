@@ -53,7 +53,8 @@ describe('The JSON-HAL walker\'s', function() {
   var customerResponse = mockResponse(customerDoc);
   var basketResponse = mockResponse(basketDoc);
 
-  var updateResponse = mockResponse({ result: 'success' }, 200);
+  var updateResponseBody = { result: 'success' };
+  var updateResponse = mockResponse(updateResponseBody);
   var payload = {
     some: 'stuff',
     data: 4711
@@ -628,7 +629,7 @@ describe('The JSON-HAL walker\'s', function() {
 
   describe('getUrl method', function() {
 
-    it('should return the last URI', function(done) {
+    it('should return the last URL', function(done) {
       api
       .newRequest()
       .follow('ea:orders', 'ea:find')
@@ -644,7 +645,7 @@ describe('The JSON-HAL walker\'s', function() {
     });
 
     // not sure what to do in this case
-    it('returns the self-URI of an embedded document', function(done) {
+    it('returns the self-URL of an embedded document', function(done) {
       api
       .newRequest()
       .follow('ea:orders', 'ea:order')
@@ -658,8 +659,8 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
-    it('yields an error if the last URI is actually an embedded ' +
-               ' resource but has no self-URI', function(done) {
+    it('yields an error if the last URL is actually an embedded ' +
+               ' resource but has no self-URL', function(done) {
       api
       .newRequest()
       .follow('ea:orders', 'ea:find', 'ea:customer', 'ea:no_self_link')
@@ -681,7 +682,7 @@ describe('The JSON-HAL walker\'s', function() {
 
   describe('post method', function() {
 
-    it('should follow multiple links and post to the last URI',
+    it('should follow multiple links and post to the last URL',
         function(done) {
       post
       .withArgs(customerUri, sinon.match.object, sinon.match.func)
@@ -701,6 +702,29 @@ describe('The JSON-HAL walker\'s', function() {
           expect(post.firstCall.args[1].body).to.exist;
           expect(post.firstCall.args[1].body).to.contain(payload.some);
           expect(post.firstCall.args[1].body).to.contain(payload.data);
+          done();
+        }
+      );
+    });
+
+    it('should convert the response to an object',
+        function(done) {
+      post
+      .withArgs(customerUri, sinon.match.object, sinon.match.func)
+      .callsArgWithAsync(2, null, updateResponse);
+
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:find', 'ea:customer')
+      .withTemplateParameters({ id: 13 })
+      .convertResponseToObject()
+      .post(payload, callback);
+
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          expect(callback).to.have.been.calledWith(null, updateResponseBody,
+              sinon.match.object);
           done();
         }
       );
@@ -731,7 +755,7 @@ describe('The JSON-HAL walker\'s', function() {
 
   describe('put method', function() {
 
-    it('should follow multiple links and put to the last URI',
+    it('should follow multiple links and put to the last URL',
         function(done) {
       put
       .withArgs(customerUri, sinon.match.object, sinon.match.func)
@@ -781,7 +805,7 @@ describe('The JSON-HAL walker\'s', function() {
 
   describe('patch method', function() {
 
-    it('should follow multiple links and patch the last URI',
+    it('should follow multiple links and patch the last URL',
         function(done) {
       patch
       .withArgs(customerUri, sinon.match.object, sinon.match.func)
@@ -829,7 +853,7 @@ describe('The JSON-HAL walker\'s', function() {
 
   describe('delete method', function() {
 
-    it('should follow multiple links and delete the last URI',
+    it('should follow multiple links and delete the last URL',
         function(done) {
       del
       .withArgs(customerUri, sinon.match.object, sinon.match.func)
