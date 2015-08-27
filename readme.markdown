@@ -173,6 +173,8 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 2.1.0 2015-08-27
+    * Update for Traverson release 2.1.0 (including `convertResponseToObject()`).
 * 2.0.1 2015-07-29
     * Fixes a bug with selecting embedded documents by a secondary key ([#8](https://github.com/basti1302/traverson-hal/issues/8), thanks to @travi).
 * 2.0.0 2015-04-07
