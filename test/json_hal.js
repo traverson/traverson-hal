@@ -630,6 +630,24 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
+    it('should yield an empty array when $all accessed on missing embedded',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:no_such_rel[$all]')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var error = callback.firstCall.args[0]; 
+          var doc = callback.firstCall.args[1];
+          expect(error).to.not.exist;
+          expect(doc).to.eql([]);
+          done();
+        }
+      );
+        });
+    
     it('should pass an embedded document into the callback',
         function(done) {
       api

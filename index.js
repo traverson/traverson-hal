@@ -193,7 +193,8 @@ function findEmbedded(ctx, log) {
       (ctx.parsedKey.index ? ctx.parsedKey.index : ''));
 
   var resourceArray = ctx.halResource.embeddedArray(ctx.parsedKey.key);
-  if (!resourceArray || resourceArray.length === 0) {
+  if ((!resourceArray || resourceArray.length === 0) &&
+       ctx.parsedKey.mode !== 'all' ) {
     return null;
   }
   log.debug('Found an array of embedded resource for: ' + ctx.parsedKey.key);
@@ -256,7 +257,9 @@ function findEmbeddedAll(ctx, embeddedArray, log) {
   // but it holds halfred objects, and other tests freak out.
   // var result = embeddedArray;
   var result = ctx.halResource.original()._embedded[ctx.parsedKey.key];
-  if (! (result instanceof Array)) { // Array.isArray(result)
+  if (! result) {
+    result = [];
+  } else if (! (result instanceof Array)) { // Array.isArray(result)
     result = [].concat(result);
   }
   
