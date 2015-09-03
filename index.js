@@ -121,6 +121,8 @@ function findLink(ctx, log) {
     case 'first':
       findLinkWithoutIndex(ctx, linkArray, log);
       break;
+    case 'all':
+      break;  // fall through to embedded path
     default:
       throw new Error('Illegal mode: ' + ctx.parsedKey.mode);
   }

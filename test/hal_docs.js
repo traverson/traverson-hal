@@ -73,7 +73,9 @@ module.exports = {
         'name': 'boss'
       }, {
         'name': 'no-href'
-      }]
+      }],
+      'ea:link_and_embedded_admin': embeddedAdmins[0]._links.self
+
     },
     'currentlyProcessing': 14,
     'shippedToday': 20,
@@ -81,7 +83,8 @@ module.exports = {
       'ea:order': embeddedOrders,
       'ea:admin': embeddedAdmins, // to test preferEmbedded
       // to test $all with a single object
-      'ea:single_embedded_admin': embeddedAdmins[0]
+      'ea:single_embedded_admin': embeddedAdmins[0],
+      'ea:link_and_embedded_admin': embeddedAdmins[0]
     }
   },
 
