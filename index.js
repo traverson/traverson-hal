@@ -256,7 +256,8 @@ function findEmbeddedAll(ctx, embeddedArray, log) {
   // I'd rather just use the embedded array,
   // but it holds halfred objects, and other tests freak out.
   // var result = embeddedArray;
-  var result = ctx.halResource.original()._embedded[ctx.parsedKey.key];
+  var result = ctx.halResource.original()._embedded &&
+      ctx.halResource.original()._embedded[ctx.parsedKey.key];
   if (! result) {
     result = [];
   } else if (! (result instanceof Array)) { // Array.isArray(result)
