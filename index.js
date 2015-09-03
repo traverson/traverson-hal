@@ -206,7 +206,7 @@ function findEmbedded(ctx, log) {
       findEmbeddedByIndex(ctx, resourceArray, log);
       break;
     case 'all':
-      findEmbeddedAll(ctx);
+      findEmbeddedAll(ctx, resourceArray, log);
       break;
     case 'first':
       findEmbeddedWithoutIndex(ctx, resourceArray, log);
@@ -251,9 +251,17 @@ function findEmbeddedByIndex(ctx, resourceArray, log) {
   };
 }
 
-function findEmbeddedAll(ctx) {
+function findEmbeddedAll(ctx, embeddedArray, log) {
+  // I'd rather just use the embedded array,
+  // but it holds halfred objects, and other tests freak out.
+  // var result = embeddedArray;
+  var result = ctx.halResource.original()._embedded[ctx.parsedKey.key];
+  if (! (result instanceof Array)) { // Array.isArray(result)
+    result = [].concat(result);
+  }
+  
   ctx.embeddedStep = {
-    doc: ctx.halResource.original()._embedded[ctx.parsedKey.key]
+    doc: result
   };
 }
 

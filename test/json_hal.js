@@ -611,6 +611,25 @@ describe('The JSON-HAL walker\'s', function() {
       );
     });
 
+    it('should yield a single embedded as an array when accessed by $all',
+        function(done) {
+      api
+      .newRequest()
+      .follow('ea:orders', 'ea:single_embedded_admin[$all]')
+      .getResource(callback);
+      waitFor(
+        function() { return callback.called; },
+        function() {
+          var error = callback.firstCall.args[0]; 
+          var doc = callback.firstCall.args[1];
+          expect(error).to.not.exist;
+          expect(doc).to.eql(
+            [ ordersDoc._embedded['ea:single_embedded_admin'] ]);
+          done();
+        }
+      );
+    });
+
     it('should pass an embedded document into the callback',
         function(done) {
       api

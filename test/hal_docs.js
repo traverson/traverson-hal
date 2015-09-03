@@ -80,6 +80,8 @@ module.exports = {
     '_embedded': {
       'ea:order': embeddedOrders,
       'ea:admin': embeddedAdmins, // to test preferEmbedded
+      // to test $all with a single object
+      'ea:single_embedded_admin': embeddedAdmins[0]
     }
   },
 
