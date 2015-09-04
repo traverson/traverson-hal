@@ -620,7 +620,7 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0]; 
+          var error = callback.firstCall.args[0];
           var doc = callback.firstCall.args[1];
           expect(error).to.not.exist;
           expect(doc).to.eql(
@@ -639,7 +639,7 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0]; 
+          var error = callback.firstCall.args[0];
           var doc = callback.firstCall.args[1];
           expect(error).to.not.exist;
           expect(doc).to.eql(
@@ -658,15 +658,15 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0]; 
+          var error = callback.firstCall.args[0];
           var doc = callback.firstCall.args[1];
           expect(error).to.not.exist;
           expect(doc).to.eql([]);
           done();
         }
       );
-        });
-    
+    });
+
     it('should pass an embedded document into the callback',
         function(done) {
       api

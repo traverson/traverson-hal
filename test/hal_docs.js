@@ -74,6 +74,7 @@ module.exports = {
       }, {
         'name': 'no-href'
       }],
+      // to test robustness against shadowing by links when using embedded/$all
       'ea:link_and_embedded_admin': embeddedAdmins[0]._links.self
 
     },
@@ -84,7 +85,8 @@ module.exports = {
       'ea:admin': embeddedAdmins, // to test preferEmbedded
       // to test $all with a single object
       'ea:single_embedded_admin': embeddedAdmins[0],
-      'ea:link_and_embedded_admin': embeddedAdmins[0]
+      // to test robustness against shadowing by links when using embedded/$all
+      'ea:link_and_embedded_admin': embeddedAdmins[0],
     }
   },
 
