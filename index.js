@@ -8,9 +8,32 @@ function JsonHalAdapter(log) {
 
 JsonHalAdapter.mediaType = 'application/hal+json';
 
-// TODO Pass the traversal state into the adapter... and possibly also only
-// modify it, do not return anything.
-JsonHalAdapter.prototype.findNextStep = function(doc, key, preferEmbedded) {
+JsonHalAdapter.prototype.findNextStep = function(t, linkObject) {
+  if (typeof linkObject === 'undefined' || linkObject === null) {
+    throw new Error('Link object is null or undefined.');
+  }
+  if (typeof linkObject !== 'object') {
+    throw new Error('Links must be objects, not ' + typeof linkObject +
+        ': ', linkObject);
+  }
+  if (!linkObject.type) {
+    throw new Error('Link objects has no type attribute.', linkObject);
+  }
+
+  switch (linkObject.type) {
+    case 'link-rel':
+      return this._handleLinkRel(t, linkObject);
+    default:
+      throw new Error('Link objects with type ' + linkObject.type +
+        ' are not supported by this adapter.', linkObject);
+  }
+};
+
+JsonHalAdapter.prototype._handleLinkRel = function(t, linkObject) {
+  var doc = t.lastStep.doc;
+  var key = linkObject.value;
+  var preferEmbedded = t.preferEmbedded;
+
   this.log.debug('parsing hal');
   var ctx = {
     doc: doc,
