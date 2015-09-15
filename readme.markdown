@@ -164,7 +164,7 @@ When working with HAL resources, for each link given to the `follow` method, tra
 
 Link relations can denote a single embedded document as well as an array of embedded documents. Therefore, the same mechanisms that are used to select an individual link from an array of link objects can also be used with embedded arrays. That is, you can always use `'ht:post[name:foo]'` or `'ht:post[1]'`, no matter if the link relation is present in the `_links` object or in the `_embedded` object.
 
-For embedded arrays you can additionally use the meta selector `$all`: If you pass `ht:post[$all]` to the `follow` method, you receive the complete array of posts, not an individual post resource. A link relation containing `$all` must only be passed as the last element to `follow` and it only works for embedded documents. Futhermore, it can only be used with `get` and `getResource`, not with `post`, `put`, `delete`, `patch` or `getUri`.
+For embedded arrays you can additionally use the meta selector `$all` which operates on embedded documents: If you pass `ht:post[$all]` to the `follow` method, you receive the complete array of posts, not an individual post resource. A link relation containing `$all` must only be passed as the last element to `follow` and it only works for embedded documents. Futhermore, it can only be used with `get` and `getResource`, not with `post`, `put`, `delete`, `patch` or `getUri`.  To provide a uniform shape for handlers, $all will always provide an array result, containing 0 or more matching embedded objects.  NOTE: this means than misspelled relations will not generate errors -- they will produce empty arrays instead.
 
 ### HAL and JSONPath
 
