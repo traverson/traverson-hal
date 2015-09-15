@@ -49,6 +49,7 @@ Installation
 | 2.0.1             | 2.0.0, 2.0.1    |
 | 2.1.0             | 2.1.0           |
 | 3.0.0             | 2.1.0           |
+| 4.0.0             | 3.0.0           |
 
 Usage
 -----
@@ -185,6 +186,8 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 4.0.0 2015-09-16
+    * Update for Traverson release 3.0.0 (including `followLocationHeader()`).
 * 3.0.0 2015-09-15
     * Various fixes for handling `$all`, ([#11](https://github.com/basti1302/traverson-hal/pull/11), thanks to @michaelabuckley):
         * Returns an array with one element instead of a bare object if the source HAL doc has single embedded resource.

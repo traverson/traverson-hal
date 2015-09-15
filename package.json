@@ -1,9 +1,23 @@
 {
   "name": "traverson-hal",
-  "version": "3.0.0",
-  "author": "Bastian Krol",
+  "version": "4.0.0",
   "description": "HAL (hypertext application language) adapter for Traverson",
   "repository": "https://github.com/basti1302/traverson-hal.git",
+  "author": {
+    "name": "Bastian Krol",
+    "email": "bastian.krol@web.de"
+  },
+  "contributors": [
+    {
+      "name": "Matt Travi",
+      "email": "programmer@travi.org",
+      "url" : "http://travi.org"
+    },
+    {
+      "name": "Michael Buckley",
+      "email": "michael@ntree.com"
+    }
+  ],
   "license": "MIT",
   "scripts": {
     "test": "grunt"
