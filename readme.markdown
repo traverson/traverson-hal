@@ -14,18 +14,6 @@ HAL adapter for Traverson
 | minified & gzipped        |  2.9 |
 | minified                  | 18   |
 
-### Version Compatibility
-
-| For traverson-hal | Use Traverson   |
-|:------------------|:----------------|
-| 1.0.0             | 1.0.0           |
-| 1.1.0             | 1.1.0           |
-| 1.2.0             | 1.2.1           |
-| 2.0.0             | 2.0.0, 2.0.1    |
-| 2.0.1             | 2.0.0, 2.0.1    |
-| 2.1.0             | 2.1.0           |
-| 3.0.0             | 2.1.0           |
-
 Introduction
 ------------
 
@@ -49,6 +37,18 @@ Installation
     * `traverson-hal.js`: Non-minified build with UMD. Same as above, just larger :-)
     * `traverson-hal.external.min.js`: Minified require/external build. Created with browserify's `--require` parameter and intended to be used (required) from other browserified modules, which were created with `--external traverson-hal`. This build could be used if you use browserify but do not want to bundle traverson-hal with your own browserify build but keep it as a separate file.
     * `traverson-hal.external.js`: Non-minified require/external build, same as before, just larger.
+
+### Version Compatibility
+
+| For traverson-hal | Use Traverson   |
+|:------------------|:----------------|
+| 1.0.0             | 1.0.0           |
+| 1.1.0             | 1.1.0           |
+| 1.2.0             | 1.2.1           |
+| 2.0.0             | 2.0.0, 2.0.1    |
+| 2.0.1             | 2.0.0, 2.0.1    |
+| 2.1.0             | 2.1.0           |
+| 3.0.0             | 2.1.0           |
 
 Usage
 -----
