@@ -97,6 +97,22 @@ describe('Traverson (when tested against a local server)', function() {
     );
   });
 
+  it('should follow the location header', function(done) {
+    jsonHalApi
+    .follow('respond_location')
+    .followLocationHeader()
+    .get(callback);
+    waitFor(
+      function() { return callback.called; },
+      function() {
+        var resultDoc = checkResponseWithBody();
+        expect(resultDoc.second).to.exist;
+        expect(resultDoc.second).to.equal('document');
+        done();
+      }
+    );
+  });
+
   function isNodeJs() {
     // can't use strict here
     if (typeof window !== 'undefined') {

@@ -23,6 +23,8 @@ JsonHalAdapter.prototype.findNextStep = function(t, linkObject) {
   switch (linkObject.type) {
     case 'link-rel':
       return this._handleLinkRel(t, linkObject);
+    case 'header':
+      return this._handleHeader(t.lastStep.response, linkObject);
     default:
       throw new Error('Link objects with type ' + linkObject.type +
         ' are not supported by this adapter.', linkObject);
@@ -301,5 +303,20 @@ function findEmbeddedWithoutIndex(ctx, resourceArray, log) {
   }
   ctx.embeddedStep = { doc: resourceArray[0].original() };
 }
+
+JsonHalAdapter.prototype._handleHeader = function(httpResponse, link) {
+  switch (link.value) {
+    case 'location':
+      var locationHeader = httpResponse.headers.location;
+      if (!locationHeader) {
+        throw new Error('Following the location header but there was no ' +
+          'location header in the last response.');
+      }
+      return { url : locationHeader };
+    default:
+      throw new Error('Link objects with type header and value ' + link.value +
+        ' are not supported by this adapter.', link);
+  }
+};
 
 module.exports = JsonHalAdapter;
