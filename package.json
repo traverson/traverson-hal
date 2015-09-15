@@ -1,6 +1,6 @@
 {
   "name": "traverson-hal",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "author": "Bastian Krol",
   "description": "HAL (hypertext application language) adapter for Traverson",
   "repository": "https://github.com/basti1302/traverson-hal.git",
