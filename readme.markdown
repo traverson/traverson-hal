@@ -14,6 +14,18 @@ HAL adapter for Traverson
 | minified & gzipped        |  2.9 |
 | minified                  | 18   |
 
+### Version Compatibility
+
+| For traverson-hal | Use Traverson   |
+|:------------------|:----------------|
+| 1.0.0             | 1.0.0           |
+| 1.1.0             | 1.1.0           |
+| 1.2.0             | 1.2.1           |
+| 2.0.0             | 2.0.0, 2.0.1    |
+| 2.0.1             | 2.0.0, 2.0.1    |
+| 2.1.0             | 2.1.0           |
+| 3.0.0             | 2.1.0           |
+
 Introduction
 ------------
 
@@ -173,6 +185,11 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 3.0.0 2015-09-15
+    * Various fixes for handling `$all`, ([#11](https://github.com/basti1302/traverson-hal/pull/11), thanks to @michaelabuckley):
+        * Returns an array with one element instead of a bare object if the source HAL doc has single embedded resource.
+        * Return an empty array when the relation has no embedded objects for the given relation (or no embedded resources at all).
+        * This is a breaking change for code that relied on the behaviour that the callback is called with an error when the relation is not present when using `$all`, now the callback is called without an error but with an empty array. This is also a breaking change for code that worked around the bug that a single element is returned when only one embedded resource was present when using `$all`.
 * 2.1.0 2015-08-27
     * Update for Traverson release 2.1.0 (including `convertResponseToObject()`).
 * 2.0.1 2015-07-29
