@@ -121,6 +121,9 @@ function findLink(ctx, log) {
     case 'first':
       findLinkWithoutIndex(ctx, linkArray, log);
       break;
+    case 'all':
+      // do not process $all as a link at all, go straight to the findEmbedded
+      break;
     default:
       throw new Error('Illegal mode: ' + ctx.parsedKey.mode);
   }
@@ -193,7 +196,8 @@ function findEmbedded(ctx, log) {
       (ctx.parsedKey.index ? ctx.parsedKey.index : ''));
 
   var resourceArray = ctx.halResource.embeddedArray(ctx.parsedKey.key);
-  if (!resourceArray || resourceArray.length === 0) {
+  if ((!resourceArray || resourceArray.length === 0) &&
+       ctx.parsedKey.mode !== 'all' ) {
     return null;
   }
   log.debug('Found an array of embedded resource for: ' + ctx.parsedKey.key);
@@ -206,7 +210,7 @@ function findEmbedded(ctx, log) {
       findEmbeddedByIndex(ctx, resourceArray, log);
       break;
     case 'all':
-      findEmbeddedAll(ctx);
+      findEmbeddedAll(ctx, resourceArray, log);
       break;
     case 'first':
       findEmbeddedWithoutIndex(ctx, resourceArray, log);
@@ -251,9 +255,17 @@ function findEmbeddedByIndex(ctx, resourceArray, log) {
   };
 }
 
-function findEmbeddedAll(ctx) {
+function findEmbeddedAll(ctx, embeddedArray, log) {
+  var result = ctx.halResource.original()._embedded &&
+      ctx.halResource.original()._embedded[ctx.parsedKey.key];
+  if (!result) {
+    result = [];
+  } else if (! (result instanceof Array)) {
+    result = [].concat(result);
+  }
+
   ctx.embeddedStep = {
-    doc: ctx.halResource.original()._embedded[ctx.parsedKey.key]
+    doc: result
   };
 }
 

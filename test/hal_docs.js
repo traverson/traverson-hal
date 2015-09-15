@@ -73,13 +73,20 @@ module.exports = {
         'name': 'boss'
       }, {
         'name': 'no-href'
-      }]
+      }],
+      // to test robustness against shadowing by links when using embedded/$all
+      'ea:link_and_embedded_admin': embeddedAdmins[0]._links.self
+
     },
     'currentlyProcessing': 14,
     'shippedToday': 20,
     '_embedded': {
       'ea:order': embeddedOrders,
       'ea:admin': embeddedAdmins, // to test preferEmbedded
+      // to test $all with a single object
+      'ea:single_embedded_admin': embeddedAdmins[0],
+      // to test robustness against shadowing by links when using embedded/$all
+      'ea:link_and_embedded_admin': embeddedAdmins[0],
     }
   },
 
