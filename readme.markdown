@@ -50,7 +50,7 @@ Installation
 | 2.1.0             | 2.1.0           |
 | 3.0.0             | 2.1.0           |
 | 4.0.0             | 3.0.0           |
-| 4.1.0             | 3.1.0           |
+| 4.1.1             | 3.1.0           |
 
 Usage
 -----
@@ -187,7 +187,7 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
-* 4.1.0 2015-11-10
+* 4.1.1 2015-11-10
     * Update to Traverson release 3.1.0 (including `withCredentials`).
 * 4.0.0 2015-09-16
     * Update for Traverson release 3.0.0 (including `followLocationHeader()`).
