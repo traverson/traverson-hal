@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Mocha Browser Tests For Traverson</title>
+    <title>Mocha Browser Tests For Traverson HAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
-    <script src="../dist/traverson-hal.external.min.js"></script>
+    <script src="../../node_modules/mocha/mocha.js"></script>
+    <script src="../dist/traverson-hal.external.js"></script>
   </head>
   <body>
     <div id="mocha"></div>
 
     <!-- load and configure mocha -->
-    <script src="../../node_modules/mocha/mocha.js"></script>
     <script>
       'use strict';
       mocha.setup('bdd')
@@ -24,10 +24,8 @@
 
     <!-- kick of tests -->
     <script>
-      if (window.mochaPhantomJS) {
-        window.mochaPhantomJS.run()
-      } else {
-        mocha.run()
+      if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+        mocha.run();
       }
     </script>
  </body>
