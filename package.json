@@ -11,7 +11,7 @@
     {
       "name": "Matt Travi",
       "email": "programmer@travi.org",
-      "url" : "http://travi.org"
+      "url": "http://travi.org"
     },
     {
       "name": "Michael Buckley",
@@ -56,7 +56,7 @@
     "sinon-chai": "^2.8.0",
     "traverson": "^3.1.3",
     "traverson-mock-response": "1.1.0",
-    "traverson-test-server": "1.8.0"
+    "traverson-test-server": "1.8.1"
   },
   "browser": {
     "traverson-test-server": false
