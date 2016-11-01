@@ -60,8 +60,5 @@
   },
   "browser": {
     "traverson-test-server": false
-  },
-  "engines": {
-    "node": ">= 4"
   }
 }
