@@ -63,16 +63,22 @@ function prepareResult(ctx, key, preferEmbedded) {
   } else {
     var message = 'Could not find a matching link nor an embedded document '+
       'for ' + key + '.';
+    var errorName = 'MissingLinkError';
     if (ctx.linkError) {
       message += ' Error while resolving linked documents: ' + ctx.linkError;
+      errorName = 'LinkedDocumentsError';
     }
     if (ctx.embeddedError) {
       message += ' Error while resolving embedded documents: ' +
         ctx.embeddedError;
+      errorName = 'EmbeddedDocumentsError';
     }
     message += ' Document: ' + JSON.stringify(ctx.doc);
 
-    throw new Error(message);
+    var error = new Error(message);
+    error.name = errorName;
+
+    throw error;
   }
 }
 
