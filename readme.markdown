@@ -50,7 +50,8 @@ Installation
 | 2.1.0             | 2.1.0           |
 | 3.0.0             | 2.1.0           |
 | 4.0.0             | 3.0.0           |
-| 4.1.1             | 3.1.0           |
+| 4.1.1             | 3.1.0-3.2.0     |
+| 5.0.0             | 5.0.0           |
 
 Usage
 -----
@@ -184,9 +185,23 @@ For embedded arrays you can additionally use the meta selector `$all` which oper
 
 JSONPath is not supported when working with HAL resources. It would also make no sense because in a HAL resource there is only one place in the document that contains all the links.
 
+### Errors
+
+`JsonHalAdapter.errors` is a map of error names that are used by traverson-hal. Whenever traverson-hal creates an `Error` object, the `name` property of the `Error` object will be set to one of the values of this map. The following error keys and values will be used:
+
+* `InvalidArgumentError: 'InvalidArgumentError'`: When an invalid argument is passed to a method.
+* `InvalidStateError: 'InvalidStateError'`: When traverson-hal encounters an invalid state during the traversal.
+* `LinkError: 'HalLinkError'`: When traverson-hal is unable to follow a link.
+* `LinkMissingOrInvalidError: 'HalLinkMissingOrInvalidError'`: When a link given to traverson-hal for the link traversal process can not be found or is invalid.
+* `EmbeddedDocumentsError: 'HalEmbeddedDocumentsError'`: When an embedded document that is expected to be present and that is required for the traversal process is not present.
+
+
 Release Notes
 -------------
 
+* 5.0.0 2016-12-20:
+     * Drop support for Node.js 0.10 and 0.12. Node.js versions 4 to 7 are tested and officially supported.
+     * All `Error` objects created by Traverson and traverson-hal now have the `name` property set, see [Traverson API docs on error names](https://github.com/basti1302/traverson/blob/master/api.markdown#traverson-errors) and [traverson-hal docs on error names](#errors). ([#21](https://github.com/basti1302/traverson-hal/issues/21) and [#22](https://github.com/basti1302/traverson-hal/issues/22), thanks to @mimol91)
 * 4.1.1 2015-11-10
     * Update to Traverson release 3.1.0 (including `withCredentials`).
 * 4.0.0 2015-09-16

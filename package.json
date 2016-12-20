@@ -23,7 +23,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "build": "grunt"
   },
   "keywords": [
     "JSON",
