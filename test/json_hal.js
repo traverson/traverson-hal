@@ -235,6 +235,8 @@ describe('The JSON-HAL walker\'s', function() {
           expect(err.message).to.contain('Error while resolving linked ' +
             'documents: The link array ea:admin exists, but has no element ' +
             'at index 7.');
+          expect(err.name).to.equal(
+            JsonHalAdapter.errors.LinkMissingOrInvalidError);
           done();
         }
       );
@@ -281,6 +283,8 @@ describe('The JSON-HAL walker\'s', function() {
         function() {
           var err = callback.firstCall.args[0];
           expect(err.message).to.contain('but there is no such link');
+          expect(err.name).to.equal(
+            JsonHalAdapter.errors.LinkMissingOrInvalidError);
           done();
         }
       );
@@ -299,6 +303,8 @@ describe('The JSON-HAL walker\'s', function() {
           expect(err.message).to.contain('Error while resolving linked ' +
             'documents: The link ea:admin[name:no-href] exists, but it has ' +
             'no href attribute.');
+          expect(err.name).to.equal(
+            JsonHalAdapter.errors.LinkMissingOrInvalidError);
           done();
         }
       );
@@ -343,8 +349,8 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error).to.not.exist;
+          var err = callback.firstCall.args[0];
+          expect(err).to.not.exist;
           var response = callback.firstCall.args[1];
           expect(response).to.exist;
           expect(response.body).to.equal(embeddedOrderResponses[0].body);
@@ -363,8 +369,8 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error).to.not.exist;
+          var err = callback.firstCall.args[0];
+          expect(err).to.not.exist;
           var response = callback.firstCall.args[1];
           expect(response).to.exist;
           expect(response.body).to.equal(embeddedOrderResponses[1].body);
@@ -384,11 +390,13 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error).to.exist;
-          expect(error.message).to.contain('Error while resolving embedded ' +
+          var err = callback.firstCall.args[0];
+          expect(err).to.exist;
+          expect(err.message).to.contain('Error while resolving embedded ' +
             'documents: The embedded array ea:order exists, but has no ' +
             'element at index 7.');
+          expect(err.name).to.equal(
+            JsonHalAdapter.errors.EmbeddedDocumentsError);
           done();
         }
       );
@@ -403,8 +411,8 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error).to.not.exist;
+          var err = callback.firstCall.args[0];
+          expect(err).to.not.exist;
           var response = callback.firstCall.args[1];
           expect(response).to.exist;
           expect(response.body).to.equal(embeddedOrderResponses[1].body);
@@ -424,10 +432,12 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error).to.exist;
-          expect(error.message).to.contain('ea:order[status:does-not-exist] ' +
+          var err = callback.firstCall.args[0];
+          expect(err).to.exist;
+          expect(err.message).to.contain('ea:order[status:does-not-exist] ' +
             'requested, but the embedded array ea:order has no such element.');
+          expect(err.name).to.equal(
+            JsonHalAdapter.errors.EmbeddedDocumentsError);
           done();
         }
       );
@@ -472,8 +482,8 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error).to.not.exist;
+          var err = callback.firstCall.args[0];
+          expect(err).to.not.exist;
           var response = callback.firstCall.args[1];
           expect(response).to.exist;
           expect(response.body).to.equal(embeddedOrdersResponse.body);
@@ -620,9 +630,9 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
+          var err = callback.firstCall.args[0];
           var doc = callback.firstCall.args[1];
-          expect(error).to.not.exist;
+          expect(err).to.not.exist;
           expect(doc).to.eql(
             [ ordersDoc._embedded['ea:single_embedded_admin'] ]);
           done();
@@ -639,9 +649,9 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
+          var err = callback.firstCall.args[0];
           var doc = callback.firstCall.args[1];
-          expect(error).to.not.exist;
+          expect(err).to.not.exist;
           expect(doc).to.eql(
             [ ordersDoc._embedded['ea:link_and_embedded_admin'] ]);
           done();
@@ -658,9 +668,9 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
+          var err = callback.firstCall.args[0];
           var doc = callback.firstCall.args[1];
-          expect(error).to.not.exist;
+          expect(err).to.not.exist;
           expect(doc).to.eql([]);
           done();
         }
@@ -725,10 +735,11 @@ describe('The JSON-HAL walker\'s', function() {
       waitFor(
         function() { return callback.called; },
         function() {
-          var error = callback.firstCall.args[0];
-          expect(error.message).to.contain('You requested an URL but the ' +
+          var err = callback.firstCall.args[0];
+          expect(err.message).to.contain('You requested an URL but the ' +
               'last resource is an embedded resource and has no URL of its ' +
               'own (that is, it has no link with rel=\"self\"');
+          expect(err.name).to.equal('LinkError');
           done();
         }
       );

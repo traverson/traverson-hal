@@ -6,18 +6,28 @@ function JsonHalAdapter(log) {
   this.log = log;
 }
 
+JsonHalAdapter.errors = {
+  InvalidArgumentError: 'InvalidArgumentError',
+  InvalidStateError: 'InvalidStateError',
+  LinkError: 'HalLinkError',
+  LinkMissingOrInvalidError: 'HalLinkMissingOrInvalidError',
+  EmbeddedDocumentsError: 'HalEmbeddedDocumentsError',
+};
+
 JsonHalAdapter.mediaType = 'application/hal+json';
 
 JsonHalAdapter.prototype.findNextStep = function(t, linkObject) {
   if (typeof linkObject === 'undefined' || linkObject === null) {
-    throw new Error('Link object is null or undefined.');
+    throw createError('Link object is null or undefined.',
+      JsonHalAdapter.errors.InvalidArgumentError);
   }
   if (typeof linkObject !== 'object') {
-    throw new Error('Links must be objects, not ' + typeof linkObject +
-        ': ', linkObject);
+    throw createError('Links must be objects, not ' + typeof linkObject +
+        ': ', JsonHalAdapter.errors.InvalidArgumentError, linkObject);
   }
   if (!linkObject.type) {
-    throw new Error('Link objects has no type attribute.', linkObject);
+    throw createError('Link objects has no type attribute.',
+      JsonHalAdapter.errors.InvalidArgumentError, linkObject);
   }
 
   switch (linkObject.type) {
@@ -26,15 +36,15 @@ JsonHalAdapter.prototype.findNextStep = function(t, linkObject) {
     case 'header':
       return this._handleHeader(t.lastStep.response, linkObject);
     default:
-      throw new Error('Link objects with type ' + linkObject.type +
-        ' are not supported by this adapter.', linkObject);
+      throw createError('Link objects with type ' + linkObject.type +
+        ' are not supported by this adapter.',
+        JsonHalAdapter.errors.InvalidArgumentError, linkObject);
   }
 };
 
 JsonHalAdapter.prototype._handleLinkRel = function(t, linkObject) {
   var doc = t.lastStep.doc;
   var key = linkObject.value;
-  var preferEmbedded = t.preferEmbedded;
 
   this.log.debug('parsing hal');
   var ctx = {
@@ -47,7 +57,7 @@ JsonHalAdapter.prototype._handleLinkRel = function(t, linkObject) {
   resolveCurie(ctx);
   findLink(ctx, this.log);
   findEmbedded(ctx, this.log);
-  return prepareResult(ctx, key, preferEmbedded);
+  return prepareResult(ctx, key, t.preferEmbedded);
 };
 
 function prepareResult(ctx, key, preferEmbedded) {
@@ -63,22 +73,29 @@ function prepareResult(ctx, key, preferEmbedded) {
   } else {
     var message = 'Could not find a matching link nor an embedded document '+
       'for ' + key + '.';
-    var errorName = 'MissingLinkError';
+    var errorName = JsonHalAdapter.errors.LinkError;
     if (ctx.linkError) {
       message += ' Error while resolving linked documents: ' + ctx.linkError;
-      errorName = 'LinkedDocumentsError';
+      errorName = JsonHalAdapter.errors.LinkMissingOrInvalidError;
     }
     if (ctx.embeddedError) {
       message += ' Error while resolving embedded documents: ' +
         ctx.embeddedError;
-      errorName = 'EmbeddedDocumentsError';
+
+      // traverson-hal tries to find the linked resource in the `_links`
+      // section as well as in the `_embedded` section, thus, in
+      // some cases (if the document has a `_links` array with a matching key as
+      // well as an `_embedded` array with a matching key but no matching
+      // *entry* in either of these arrays) both ctx.linkError and
+      // ctx.embeddedError will be present. We only claim that it is an embedded
+      // documents error if there was no matching link array or when the
+      // preferEmbedded flag is set.
+      if (!ctx.linkError || preferEmbedded) {
+        errorName = JsonHalAdapter.errors.EmbeddedDocumentsError;
+      }
     }
     message += ' Document: ' + JSON.stringify(ctx.doc);
-
-    var error = new Error(message);
-    error.name = errorName;
-
-    throw error;
+    throw createError(message, errorName, ctx.doc);
   }
 }
 
@@ -156,7 +173,8 @@ function findLink(ctx, log) {
       // do not process $all as a link at all, go straight to the findEmbedded
       break;
     default:
-      throw new Error('Illegal mode: ' + ctx.parsedKey.mode);
+      throw createError('Illegal mode: ' + ctx.parsedKey.mode,
+        JsonHalAdapter.errors.InvalidArgumentError);
   }
 }
 
@@ -229,7 +247,7 @@ function findEmbedded(ctx, log) {
   var resourceArray = ctx.halResource.embeddedArray(ctx.parsedKey.key);
   if ((!resourceArray || resourceArray.length === 0) &&
        ctx.parsedKey.mode !== 'all' ) {
-    return null;
+    return;
   }
   log.debug('Found an array of embedded resource for: ' + ctx.parsedKey.key);
 
@@ -247,7 +265,8 @@ function findEmbedded(ctx, log) {
       findEmbeddedWithoutIndex(ctx, resourceArray, log);
       break;
     default:
-      throw new Error('Illegal mode: ' + ctx.parsedKey.mode);
+      throw createError('Illegal mode: ' + ctx.parsedKey.mode,
+        JsonHalAdapter.errors.InvalidArgumentError);
   }
 }
 
@@ -315,14 +334,25 @@ JsonHalAdapter.prototype._handleHeader = function(httpResponse, link) {
     case 'location':
       var locationHeader = httpResponse.headers.location;
       if (!locationHeader) {
-        throw new Error('Following the location header but there was no ' +
-          'location header in the last response.');
+        throw createError('Following the location header but there was no ' +
+          'location header in the last response.',
+          JsonHalAdapter.errors.InvalidStateError);
       }
       return { url : locationHeader };
     default:
-      throw new Error('Link objects with type header and value ' + link.value +
-        ' are not supported by this adapter.', link);
+      throw createError('Link objects with type header and value ' +
+        link.value + ' are not supported by this adapter.',
+        JsonHalAdapter.errors.InvalidArgumentError, link);
   }
 };
+
+function createError(message, name, data) {
+  var error = new Error(message);
+  error.name = name;
+  if (data) {
+    error.data = data;
+  }
+  return error;
+}
 
 module.exports = JsonHalAdapter;
