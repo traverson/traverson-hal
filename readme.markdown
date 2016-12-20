@@ -187,6 +187,11 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 4.1.2 2016-12-20
+    * Drop support for node 0.12.
+    * Add support to node >= 4.
+    * Update dependencies.
+    * Add error names to simplify error handling.
 * 4.1.1 2015-11-10
     * Update to Traverson release 3.1.0 (including `withCredentials`).
 * 4.0.0 2015-09-16
