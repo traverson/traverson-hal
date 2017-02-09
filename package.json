@@ -59,7 +59,7 @@
     "request": "^2.72.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
-    "traverson": "^5.0.0",
+    "traverson": "^6.0.0",
     "traverson-mock-response": "1.1.0",
     "traverson-test-server": "1.8.1"
   },
