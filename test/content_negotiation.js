@@ -55,13 +55,13 @@ describe('Content negotiation', function() {
       thirdResponse = mockResponse({ content: 'awesome' });
 
       get
-      .withArgs(rootUri, {}, sinon.match.func)
+      .withArgs(rootUri, sinon.match.any, sinon.match.func)
       .callsArgWithAsync(2, null, rootResponse, rootResponse.body);
       get
-      .withArgs(firstUri, {}, sinon.match.func)
+      .withArgs(firstUri, sinon.match.any, sinon.match.func)
       .callsArgWithAsync(2, null, secondResponse, secondResponse.body);
       get
-      .withArgs(secondUri, {}, sinon.match.func)
+      .withArgs(secondUri, sinon.match.any, sinon.match.func)
       .callsArgWithAsync(2, null, thirdResponse, thirdResponse.body);
     });
 
@@ -99,13 +99,13 @@ describe('Content negotiation', function() {
       thirdResponse = mockResponse({ content: 'awesome' });
 
       get
-      .withArgs(rootUri, {}, sinon.match.func)
+      .withArgs(rootUri, sinon.match.any, sinon.match.func)
       .callsArgWithAsync(2, null, rootResponse, rootResponse.body);
       get
-      .withArgs(firstUri, {}, sinon.match.func)
+      .withArgs(firstUri, sinon.match.any, sinon.match.func)
       .callsArgWithAsync(2, null, secondResponse, secondResponse.body);
       get
-      .withArgs(secondUri, {}, sinon.match.func)
+      .withArgs(secondUri, sinon.match.any, sinon.match.func)
       .callsArgWithAsync(2, null, thirdResponse, thirdResponse.body);
     });
 

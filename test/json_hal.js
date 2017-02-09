@@ -95,31 +95,31 @@ describe('The JSON-HAL walker\'s', function() {
     };
 
     get
-    .withArgs(rootUri, {}, sinon.match.func)
+    .withArgs(rootUri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, rootResponse);
     get
-    .withArgs(ordersUri, {}, sinon.match.func)
+    .withArgs(ordersUri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, ordersResponse);
     get
-    .withArgs(admin2Uri, {}, sinon.match.func)
+    .withArgs(admin2Uri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, admin2Response);
     get
-    .withArgs(admin5Uri, {}, sinon.match.func)
+    .withArgs(admin5Uri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, admin5Response);
     get
-    .withArgs(basket1Uri, {}, sinon.match.func)
+    .withArgs(basket1Uri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, basket1Response);
     get
-    .withArgs(basket2Uri, {}, sinon.match.func)
+    .withArgs(basket2Uri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, basket2Response);
     get
-    .withArgs(singleOrderUri, {}, sinon.match.func)
+    .withArgs(singleOrderUri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, singleOrderResponse);
     get
-    .withArgs(rootUri + '/baskets/987', {}, sinon.match.func)
+    .withArgs(rootUri + '/baskets/987', sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, basketResponse);
     get
-    .withArgs(customerUri, {}, sinon.match.func)
+    .withArgs(customerUri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, customerResponse);
     callback = sinon.spy();
   });
