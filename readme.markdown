@@ -9,10 +9,10 @@ HAL adapter for Traverson
 
 [![NPM](https://nodei.co/npm/traverson-hal.png?downloads=true&stars=true)](https://nodei.co/npm/traverson-hal/)
 
-| File Size (browser build) | KB   |
-|---------------------------|-----:|
-| minified & gzipped        |  2.9 |
-| minified                  | 18   |
+| File Size (browser build) | KB  |
+|---------------------------|----:|
+| minified & gzipped        |  4  |
+| minified                  | 12  |
 
 Introduction
 ------------
@@ -52,6 +52,7 @@ Installation
 | 4.0.0             | 3.0.0           |
 | 4.1.1             | 3.1.0-3.2.0     |
 | 5.0.0             | 5.0.0           |
+| 6.0.0             | 6.0.1           |
 
 Usage
 -----
@@ -199,9 +200,11 @@ JSONPath is not supported when working with HAL resources. It would also make no
 Release Notes
 -------------
 
+* 6.0.0 2017-02-10:
+    * Update to Traverson release 6.0.1 (including auto headers).
 * 5.0.0 2016-12-20:
-     * Drop support for Node.js 0.10 and 0.12. Node.js versions 4 to 7 are tested and officially supported.
-     * All `Error` objects created by Traverson and traverson-hal now have the `name` property set, see [Traverson API docs on error names](https://github.com/basti1302/traverson/blob/master/api.markdown#traverson-errors) and [traverson-hal docs on error names](#errors). ([#21](https://github.com/basti1302/traverson-hal/issues/21) and [#22](https://github.com/basti1302/traverson-hal/issues/22), thanks to @mimol91)
+    * Drop support for Node.js 0.10 and 0.12. Node.js versions 4 to 7 are tested and officially supported.
+    * All `Error` objects created by Traverson and traverson-hal now have the `name` property set, see [Traverson API docs on error names](https://github.com/basti1302/traverson/blob/master/api.markdown#traverson-errors) and [traverson-hal docs on error names](#errors). ([#21](https://github.com/basti1302/traverson-hal/issues/21) and [#22](https://github.com/basti1302/traverson-hal/issues/22), thanks to @mimol91)
 * 4.1.1 2015-11-10
     * Update to Traverson release 3.1.0 (including `withCredentials`).
 * 4.0.0 2015-09-16
