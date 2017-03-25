@@ -15,7 +15,7 @@ To release version x.y.z:
 - `git add -f browser/dist/traverson-hal.*` (to add the build artifacts to the release branch)
 - `git commit -m"add build artifacts for release"`
 - `git push origin release-x.y.z`
-- [create a new release on github](https://github.com/basti1302/traverson-hal/releases/new)
+- [create a new release on github](https://github.com/traverson/traverson-hal/releases/new)
   - Tag version: `x.y.z` (without any prefix or suffix)
   - Target: The release branch that hast just been created
   - Release title === Tag version

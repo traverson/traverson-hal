@@ -132,7 +132,7 @@ describe('Traverson (when tested against the haltalk server at ' + rootUri +
     var body = {
       content: 'Hello! I\'m Traverson, the Node.js module to work with ' +
           'hypermedia APIs. You can find out more about me at ' +
-          'https://github.com/basti1302/traverson. This is just a test post. ' +
+          'https://github.com/traverson/traverson. This is just a test post. ' +
           '@mikekelly: Don\'t worry, this tests will only be run manually a ' +
           'few times here and there, I\'ll promise to not spam your haltalk ' +
           'server too much :-)'

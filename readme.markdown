@@ -4,8 +4,8 @@ traverson-hal
 HAL adapter for Traverson
 -------------------------
 
-[![Build Status](https://travis-ci.org/basti1302/traverson-hal.png?branch=master)](https://travis-ci.org/basti1302/traverson-hal)
-[![Dependency Status](https://david-dm.org/basti1302/traverson-hal.png)](https://david-dm.org/basti1302/traverson-hal)
+[![Build Status](https://travis-ci.org/traverson/traverson-hal.png?branch=master)](https://travis-ci.org/traverson/traverson-hal)
+[![Dependency Status](https://david-dm.org/traverson/traverson-hal.png)](https://david-dm.org/traverson/traverson-hal)
 
 [![NPM](https://nodei.co/npm/traverson-hal.png?downloads=true&stars=true)](https://nodei.co/npm/traverson-hal/)
 
@@ -17,7 +17,7 @@ HAL adapter for Traverson
 Introduction
 ------------
 
-traverson-hal is a [Traverson](https://github.com/basti1302/traverson) plug-in that adds support for the JSON dialect of [HAL](http://tools.ietf.org/id/draft-kelly-json-hal-06), the hypertext application language to Traverson. Internally, traverson-hal uses [Halfred](https://github.com/basti1302/halfred) to work with HAL resources.
+traverson-hal is a [Traverson](https://github.com/traverson/traverson) plug-in that adds support for the JSON dialect of [HAL](http://tools.ietf.org/id/draft-kelly-json-hal-06), the hypertext application language to Traverson. Internally, traverson-hal uses [Halfred](https://github.com/traverson/halfred) to work with HAL resources.
 
 While in theory you could use Traverson even without special support for HAL by specifying each link relation with JSONPath (like `$._links.linkName`) that would be quite cumbersome. traverson-hal makes working with HAL APIs in Traverson a breeze.
 
@@ -32,7 +32,7 @@ Installation
 
 * If you are using npm and [Browserify](http://browserify.org/): Just `npm install traverson traverson-hal --save` and include `traverson` and `traverson-hal` via `require` (see below), then browserify your module as usual - browserify will include Traverson and its dependencies for you .
 * If you are using [Bower](http://bower.io): `bower install traverson traverson-hal--save`
-* Otherwise you can grab a download from the [latest release](https://github.com/basti1302/traverson-hal/releases/latest). None of files includes Traverson itself, so you will also have to download a Traverson release.
+* Otherwise you can grab a download from the [latest release](https://github.com/traverson/traverson-hal/releases/latest). None of files includes Traverson itself, so you will also have to download a Traverson release.
     * `traverson-hal.min.js`: Minified build with UMD. This build can be used with an AMD loader like RequireJS or with a script tag (in which case it will register `TraversonJsonHalAdapter` in the global scope). **If in doubt, use this build.**
     * `traverson-hal.js`: Non-minified build with UMD. Same as above, just larger :-)
     * `traverson-hal.external.min.js`: Minified require/external build. Created with browserify's `--require` parameter and intended to be used (required) from other browserified modules, which were created with `--external traverson-hal`. This build could be used if you use browserify but do not want to bundle traverson-hal with your own browserify build but keep it as a separate file.
@@ -159,7 +159,7 @@ http://haltalk.herokuapp.com/users/traverson/posts
         "_links": { "self": { "href": "/posts/526a58034136280002000016" },
           "ht:author": { "href": "/users/traverson", "title": "Bastian Krol" }
         },
-        "content": "Hello! I'm Traverson, the Node.js module to work with hypermedia APIs. You can find out more about me at https://github.com/basti1302/traverson. This is just a test post. @mikekelly: Don't worry, this tests will only be run manually a few times here and there, I'll promise to not spam your haltalk server too much :-)",
+        "content": "Hello! I'm Traverson, the Node.js module to work with hypermedia APIs. You can find out more about me at https://github.com/traverson/traverson. This is just a test post. @mikekelly: Don't worry, this tests will only be run manually a few times here and there, I'll promise to not spam your haltalk server too much :-)",
         "created_at": "2013-10-25T11:37:39+00:00"
       },
       ...
@@ -204,20 +204,20 @@ Release Notes
     * Update to Traverson release 6.0.1 (including auto headers).
 * 5.0.0 2016-12-20:
     * Drop support for Node.js 0.10 and 0.12. Node.js versions 4 to 7 are tested and officially supported.
-    * All `Error` objects created by Traverson and traverson-hal now have the `name` property set, see [Traverson API docs on error names](https://github.com/basti1302/traverson/blob/master/api.markdown#traverson-errors) and [traverson-hal docs on error names](#errors). ([#21](https://github.com/basti1302/traverson-hal/issues/21) and [#22](https://github.com/basti1302/traverson-hal/issues/22), thanks to @mimol91)
+    * All `Error` objects created by Traverson and traverson-hal now have the `name` property set, see [Traverson API docs on error names](https://github.com/traverson/traverson/blob/master/api.markdown#traverson-errors) and [traverson-hal docs on error names](#errors). ([#21](https://github.com/traverson/traverson-hal/issues/21) and [#22](https://github.com/traverson/traverson-hal/issues/22), thanks to @mimol91)
 * 4.1.1 2015-11-10
     * Update to Traverson release 3.1.0 (including `withCredentials`).
 * 4.0.0 2015-09-16
     * Update for Traverson release 3.0.0 (including `followLocationHeader()`).
 * 3.0.0 2015-09-15
-    * Various fixes for handling `$all`, ([#11](https://github.com/basti1302/traverson-hal/pull/11), thanks to @michaelabuckley):
+    * Various fixes for handling `$all`, ([#11](https://github.com/traverson/traverson-hal/pull/11), thanks to @michaelabuckley):
         * Returns an array with one element instead of a bare object if the source HAL doc has single embedded resource.
         * Return an empty array when the relation has no embedded objects for the given relation (or no embedded resources at all).
         * This is a breaking change for code that relied on the behaviour that the callback is called with an error when the relation is not present when using `$all`, now the callback is called without an error but with an empty array. This is also a breaking change for code that worked around the bug that a single element is returned when only one embedded resource was present when using `$all`.
 * 2.1.0 2015-08-27
     * Update for Traverson release 2.1.0 (including `convertResponseToObject()`).
 * 2.0.1 2015-07-29
-    * Fixes a bug with selecting embedded documents by a secondary key ([#8](https://github.com/basti1302/traverson-hal/issues/8), thanks to @travi).
+    * Fixes a bug with selecting embedded documents by a secondary key ([#8](https://github.com/traverson/traverson-hal/issues/8), thanks to @travi).
 * 2.0.0 2015-04-07
     * Update for Traverson release 2.0.0 (including `traversal.continue()`).
 * 1.2.0 2015-03-15
