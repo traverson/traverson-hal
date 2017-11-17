@@ -117,7 +117,7 @@ describe('The JSON-HAL walker\'s', function() {
     .callsArgWithAsync(2, null, singleOrderResponse);
     get
     .withArgs(rootUri + '/baskets/987', sinon.match.any, sinon.match.func)
-    .callsArgWithAsync(2, null, basketResponse);
+    .callsArgWithAsync(2, null, basket1Response);
     get
     .withArgs(customerUri, sinon.match.any, sinon.match.func)
     .callsArgWithAsync(2, null, customerResponse);
