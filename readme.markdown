@@ -170,21 +170,87 @@ http://haltalk.herokuapp.com/users/traverson/posts
 
 This will give you all posts that the account `traverson` posted to Mike Kelly's haltalk server. Note that we called `jsonHal()` on Traverson's request builder (the object returned from `traverson.from(...)` instead of the usual `traverson.from(...).json()`. When called in this way, Traverson will assume the resources it receives comply with the HAL specification and looks for links in the `_links` property. If there is no such link, traverson-hal will also look for an embedded resource with the given name. You can omit the method call to `jsonHal()` and rely on content type detection when you are sure that the server always sets the HTTP header `Content-Type: application/hal+json` in its responses. However, some HAL APIs use `Content-Type: application/json` in their responses although the return HAL resources.
 
-You can also pass strings like `'ht:post[name:foo]'` to the `follow` method to select links (which share the same link relation) by a secondary key. Because multiple links with the same link relation type are represented as an array of link objects in HAL, you can also use an array indexing notation like `'ht:post[1]'` to select an individual elements from an array of link objects. However, this is not recommended and should only be used as a last resort if the API does not provide a secondary key to select the correct link, because it relies on the ordering of the links as returned from the server, which might not be guaranteed to be always the same.
+### Selecting From A Collection Of Resources
 
-You can also use the array indexing notation `'ht:post[1]'` to target individual elements in an array of embedded resources.
+The HAL specification explicitly allows the values in the `_links` object to be _"either a Link Object or an array of Link Objects"_. If there is an array of link objects, this corresponds to multiple resources that have the same link relation. In these cases it is often necessary to be more specific about which link to use when there is an array of links for the link relation in question.
 
-#### Embedded Documents
+#### Secondary Key
+
+Section 5.5 of the HAL specification introduces the `name` property of link objects which _"MAY be used as a secondary key for selecting Link Objects which share the same relation type."_
+
+You can pass strings like `'ht:post[name:foo]'` to the `follow` method to select links from an array by this secondary key, that is, by the `name` attribute of the link object. In fact, traverson-hal allows **any** attribute of the link object to be used as a secondary key in this manner, not only the `name` attribute.
+
+Let's look at an example:
+
+```
+'_links': {
+  'ht:post': [{
+    'href': '/posts/2',
+    'title': 'A Blogpost About Nothing In Particular',
+    'name': 'bar'
+  }, {
+    'href': '/posts/7',
+    'title': 'Traverson For Dummies',
+    'name': 'foo'
+  }]
+}
+```
+
+With `'ht:post[name:foo]'`, the second link from that array would be selected and the resource at URL `/posts/7` would be fetched.
+
+As said, in contrast to the spec, with traverson-hal you are not restricted to the `name` attribute. Let's look at another example:
+
+```
+'_links': {
+  'ht:post': [{
+    'href': '/posts/2',
+    'title': 'A Blogpost About Nothing In Particular',
+    'id': 'post-about-nothing'
+  }, {
+    'href': '/posts/7',
+    'title': 'Traverson For Dummies',
+    'id': 'traverson-for-dummies'
+  }]
+}
+```
+
+With `'ht:post[id:traverson-for-dummies]'`, the second link from that array would be selected and the resource at URL `/posts/7` would be fetched.
+
+Note: You can also use the secondary key notation `'ht:post[name:foo]'` to target individual elements in an array of embedded resources (see below).
+
+#### Array Index
+
+Because multiple links with the same link relation type are represented as an array of link objects in HAL, you can also use an array indexing notation like `'ht:post[1]'` to select an individual elements from an array of link objects. Array indices are zero based, the example `'ht:post[1]'` would use the second element from the array of posts (see above).
+
+However, this is not recommended and should only be used as a last resort if the API does not provide a secondary key to select the correct link, because it relies on the ordering of the links as returned from the server, which might not be guaranteed to be always the same.
+
+Note: You can also use the array indexing notation `'ht:post[1]'` to target individual elements in an array of embedded resources (see below).
+
+#### Using The First Link Arbitrarily
+
+If there is an array of links and neither a secondary key nor an array index have been specified, traverson-hal arbitrarily chooses the first link from the array.
+
+
+### Embedded Documents
 
 When working with HAL resources, for each link given to the `follow` method, traverson-hal checks the `_links` object. If the `_links` object does not have the property in question, traverson-hal also automatically checks the embedded document (the `_embedded` object). If there is an embedded document with the correct property key, this one will be used instead. If there is both a `_link` and an `_embedded` object with the same name, traverson-hal will prefer the link by default, not the embedded object (reason: the spec says that an embedded resource may "be a full, partial, or inconsistent version of the representation served from the target URI", so to get the complete and up to date document your best bet is to follow the link to the actual resource, if available). This behaviour can be configured by calling `preferEmbeddedResources()` on the request builder object, which will make traverson-hal prefer the embedded resource over following a link.
 
-Link relations can denote a single embedded document as well as an array of embedded documents. Therefore, the same mechanisms that are used to select an individual link from an array of link objects can also be used with embedded arrays. That is, you can always use `'ht:post[name:foo]'` or `'ht:post[1]'`, no matter if the link relation is present in the `_links` object or in the `_embedded` object.
+#### Selecting From A Collection Of Embedded Resources
 
-For embedded arrays you can additionally use the meta selector `$all` which operates on embedded documents: If you pass `ht:post[$all]` to the `follow` method, you receive the complete array of posts, not an individual post resource. A link relation containing `$all` must only be passed as the last element to `follow` and it only works for embedded documents. Futhermore, it can only be used with `get` and `getResource`, not with `post`, `put`, `delete`, `patch` or `getUri`.  To provide a uniform shape for handlers, $all will always provide an array result, containing 0 or more matching embedded objects.  NOTE: this means than misspelled relations will not generate errors -- they will produce empty arrays instead.
+Link relations can denote a single embedded document as well as an array of embedded documents. Therefore, the same mechanisms that are used to select an individual link from an array of link objects can also be used with embedded arrays. That is, you can always use `'ht:post[name:foo]'`, `'ht:post[id:traverson-for-dummies]'`, or `'ht:post[1]'`, no matter if the link relation is present in the `_links` object or in the `_embedded` object.
+
+#### Using The First Embedded Resource Arbitrarily
+
+If there is an array of embedded resources and neither a secondary key nor an array index have been specified, traverson-hal arbitrarily chooses the first resource from the array.
+
+#### The $all Meta Selector
+
+For embedded arrays you can additionally use the meta selector `$all`, which operates on embedded documents: If you pass `ht:post[$all]` to the `follow` method, you receive the complete array of posts, not an individual post resource. A link relation containing `$all` must only be passed as the last element to `follow` and it only works for embedded documents. Futhermore, it can only be used with `get` and `getResource`, not with `post`, `put`, `delete`, `patch` or `getUri`.  To provide a uniform shape for handlers, $all will always provide an array result, containing 0 or more matching embedded objects. NOTE: this means than using a non-existing link relation with `$all` will not generate errors -- they will produce empty arrays instead.
+
 
 ### HAL and JSONPath
 
-JSONPath is not supported when working with HAL resources. It would also make no sense because in a HAL resource there is only one place in the document that contains all the links.
+JSONPath (a feature supported in Traverson core) is not supported when working with HAL resources. It would also make no sense because in a HAL resource there is only one place in the document that contains all the links.
 
 ### Errors
 
