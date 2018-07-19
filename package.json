@@ -56,7 +56,7 @@
     "load-grunt-tasks": "^3.5.0",
     "mocha": "^4.0.1",
     "poll-forever": "^1.0.0",
-    "request": "^2.72.0",
+    "request": "^2.87.0",
     "sinon": "^4.1.2",
     "sinon-chai": "^2.14.0",
     "traverson": "^6.0.4",

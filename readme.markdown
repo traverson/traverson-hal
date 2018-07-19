@@ -53,6 +53,8 @@ Installation
 | 4.1.1             | 3.1.0-3.2.0     |
 | 5.0.0             | 5.0.0           |
 | 6.0.0             | 6.0.1           |
+| 6.0.1             | 6.0.4           |
+| 6.0.2             | 6.0.4           |
 
 Usage
 -----
@@ -266,6 +268,8 @@ JSONPath (a feature supported in Traverson core) is not supported when working w
 Release Notes
 -------------
 
+* 6.0.2 2018-07-19:
+    * Update `request` devDependency to avoid depending on vulnerable `hoek@4.2.0`.
 * 6.0.1 2018-07-19:
     * Update to Traverson release 6.0.4.
 * 6.0.0 2017-02-10:
