@@ -1,6 +1,6 @@
 {
   "name": "traverson-hal",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "HAL (hypertext application language) adapter for Traverson",
   "repository": "https://github.com/traverson/traverson-hal.git",
   "author": {
@@ -37,7 +37,7 @@
     "HAL"
   ],
   "peerDependencies": {
-    "traverson": "^6.0.1"
+    "traverson": "^6.0.4"
   },
   "dependencies": {
     "halfred": "1.0.0"
@@ -59,7 +59,7 @@
     "request": "^2.72.0",
     "sinon": "^4.1.2",
     "sinon-chai": "^2.14.0",
-    "traverson": "^6.0.1",
+    "traverson": "^6.0.4",
     "traverson-mock-response": "1.1.0",
     "traverson-test-server": "1.9.0"
   },

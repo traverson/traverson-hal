@@ -266,6 +266,8 @@ JSONPath (a feature supported in Traverson core) is not supported when working w
 Release Notes
 -------------
 
+* 6.0.1 2018-07-19:
+    * Update to Traverson release 6.0.4.
 * 6.0.0 2017-02-10:
     * Update to Traverson release 6.0.1 (including auto headers).
 * 5.0.0 2016-12-20:
