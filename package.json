@@ -1,6 +1,6 @@
 {
   "name": "traverson-hal",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "HAL (hypertext application language) adapter for Traverson",
   "repository": "https://github.com/traverson/traverson-hal.git",
   "author": {
