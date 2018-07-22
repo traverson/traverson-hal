@@ -65,5 +65,10 @@
   },
   "browser": {
     "traverson-test-server": false
+  },
+  "greenkeeper": {
+    "ignore": [
+      "load-grunt-tasks"
+    ]
   }
 }
