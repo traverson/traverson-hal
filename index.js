@@ -4,6 +4,7 @@ var halfred = require('halfred');
 
 function JsonHalAdapter(log) {
   this.log = log;
+  halfred.injectLogger(log);
 }
 
 JsonHalAdapter.errors = {
