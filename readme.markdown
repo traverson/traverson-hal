@@ -265,6 +265,18 @@ JSONPath (a feature supported in Traverson core) is not supported when working w
 * `EmbeddedDocumentsError: 'HalEmbeddedDocumentsError'`: When an embedded document that is expected to be present and that is required for the traversal process is not present.
 
 
+Contributing
+------------
+
+See [Contributing to traverson-hal](https://github.com/traverson/traverson-hal/blob/master/CONTRIBUTING.md).
+
+
+Code of Conduct
+---------------
+
+See [Code of Conduct](https://github.com/traverson/traverson-hal/blob/master/CODE_OF_CONDUCT.md).
+
+
 Release Notes
 -------------
 
