@@ -33,3 +33,6 @@ Release Notes
     * Update to Traverson release 6.0.4.
 * 6.0.2 2018-07-19:
     * Update `request` devDependency to avoid depending on vulnerable `hoek@4.2.0`.
+* 6.0.3 2018-09-09:
+    * Inject the Traverson logger into Halfred. ([#30](https://github.com/traverson/traverson-hal/issues/30))
+
