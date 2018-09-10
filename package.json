@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "commitlint-config-traverson": "^1.0.1",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
     "grunt-cli": "^1.2.0",
@@ -53,6 +54,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha": "^1.0.2",
     "grunt-mocha-test": "^0.13.2",
+    "husky": "^1.0.0-rc.13",
     "load-grunt-tasks": "^3.5.2",
     "mocha": "^5.2.0",
     "poll-forever": "^1.0.0",
