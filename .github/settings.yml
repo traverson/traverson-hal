@@ -1,0 +1,4 @@
+repository:
+  name: traverson-hal
+  description: A Traverson media-type plug-in that adds support for JSON-HAL.
+  private: false
