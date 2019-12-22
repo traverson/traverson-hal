@@ -65,7 +65,7 @@
     "mocha": "^5.2.0",
     "poll-forever": "^1.0.0",
     "request": "^2.87.0",
-    "sinon": "^7.2.4",
+    "sinon": "^8.0.0",
     "sinon-chai": "^3.2.0",
     "traverson": "^6.1.0",
     "traverson-mock-response": "1.1.0",
