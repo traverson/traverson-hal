@@ -58,7 +58,7 @@
     "grunt-contrib-jshint": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-mocha": "^1.0.2",
+    "grunt-mocha": "^1.2.0",
     "grunt-mocha-test": "^0.13.2",
     "husky": "^4.0.3",
     "load-grunt-tasks": "^3.5.2",
