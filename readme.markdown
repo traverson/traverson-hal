@@ -4,7 +4,7 @@ traverson-hal
 HAL adapter for Traverson
 -------------------------
 
-[![Build Status](https://travis-ci.org/traverson/traverson-hal.png?branch=master)](https://travis-ci.org/traverson/traverson-hal)
+[![Build Status](https://img.shields.io/travis/com/traverson/traverson-hal.svg?branch=master)](https://travis-ci.com/traverson/traverson-hal)
 [![Dependency Status](https://david-dm.org/traverson/traverson-hal.png)](https://david-dm.org/traverson/traverson-hal)
 [![NPM](https://nodei.co/npm/traverson-hal.png?downloads=true&stars=true)](https://nodei.co/npm/traverson-hal/)
 [![Greenkeeper badge](https://badges.greenkeeper.io/traverson/traverson-hal.svg)](https://greenkeeper.io/)
