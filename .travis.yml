@@ -1,4 +1,8 @@
-language: node_js
+version: ~> 1.0
+
+import:
+  - form8ion/.travis-ci:node.yml
+  - traverson/.travis-ci:authenticated-semantic-release-stage.yml
 
 node_js:
 - '10.6.0'
@@ -10,6 +14,3 @@ node_js:
 
 sudo: false
 
-env:
-  global:
-    secure: GJS1HncilhBL5EOtWYCTeblDN2P0VHNTRoqrBAJeaMNA4m3an12HfcLqXTDk+PoOViPwYoiEWTo2TP9i7ryTUoW59U1WqmzqLujxcWDol8uewGg1SGFv/fiHMhMsgouWhbqUp9u3AOjevLpn7fCTACKxb1BsPhbDR3eeJfnxb1g=
