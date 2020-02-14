@@ -21,6 +21,9 @@
       "name": "Adam Szaraniec"
     }
   ],
+  "engines": {
+    "node": ">= 10"
+  },
   "license": "MIT",
   "scripts": {
     "test": "grunt",
