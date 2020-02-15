@@ -1,3 +1,15 @@
+# [7.0.0-alpha.2](https://github.com/traverson/traverson-hal/compare/v7.0.0-alpha.1...v7.0.0-alpha.2) (2020-02-15)
+
+
+### chore
+
+* **bower:** dropped support for bower ([63435ce](https://github.com/traverson/traverson-hal/commit/63435ce1e6c73e9f75d09a3d72a10bc056c9492e))
+
+
+### BREAKING CHANGES
+
+* **bower:** Bower is no longer supported
+
 Release Notes
 -------------
 
@@ -35,4 +47,3 @@ Release Notes
     * Update `request` devDependency to avoid depending on vulnerable `hoek@4.2.0`.
 * 6.0.3 2018-09-09:
     * Inject the Traverson logger into Halfred. ([#30](https://github.com/traverson/traverson-hal/issues/30))
-
