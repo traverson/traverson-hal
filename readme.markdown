@@ -31,7 +31,6 @@ Installation
 ### Browser
 
 * If you are using npm and [Browserify](http://browserify.org/): Just `npm install traverson traverson-hal --save` and include `traverson` and `traverson-hal` via `require` (see below), then browserify your module as usual - browserify will include Traverson and its dependencies for you .
-* If you are using [Bower](http://bower.io): `bower install traverson traverson-hal--save`
 * Otherwise you can grab a download from the [latest release](https://github.com/traverson/traverson-hal/releases/latest). None of files includes Traverson itself, so you will also have to download a Traverson release.
     * `traverson-hal.min.js`: Minified build with UMD. This build can be used with an AMD loader like RequireJS or with a script tag (in which case it will register `TraversonJsonHalAdapter` in the global scope). **If in doubt, use this build.**
     * `traverson-hal.js`: Non-minified build with UMD. Same as above, just larger :-)

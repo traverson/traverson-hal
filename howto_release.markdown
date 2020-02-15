@@ -6,13 +6,10 @@ To release version x.y.z:
 - bump version of peer dependency *AND* devDependency for traverson in package.json to latest
 - bump version in package.json to x.y.z
 - bump version in package-lock.json to x.y.z
-- bump version in bower.json to x.y.z
 - npm install
 - `npm run build` (to create a fresh browser build, also make sure all tests pass etc.)
-- First release? Then `bower register package-name git://github.com/user/repo.git`
 - `git commit -am"release x.y.z" && git push`
 - `npm publish`
-- `git checkout -b release-x.y.z` (to create the release branch, required for bower)
 - `git add -f browser/dist/traverson-hal.*` (to add the build artifacts to the release branch)
 - `git commit -m"add build artifacts for release"`
 - `git push origin release-x.y.z`
@@ -23,7 +20,7 @@ To release version x.y.z:
   - empty description
   - add all four JS files from browser/dist as "binaries" to the release
   - Publish release
-- Why not just create a tag from the branch via git? Because we want to add the build artifacts to the GitHub relase as attachments (for users neither using npm or bower). This is only possible if the release was created via GitHub's web interface. Normal git tags show up as releases there too, but you can't add attachments or edit the release afterwards. Releases created via the web interface create a git tag automatically, however.
+- Why not just create a tag from the branch via git? Because we want to add the build artifacts to the GitHub relase as attachments (for users not using npm). This is only possible if the release was created via GitHub's web interface. Normal git tags show up as releases there too, but you can't add attachments or edit the release afterwards. Releases created via the web interface create a git tag automatically, however.
 - `git checkout master`
 - `git branch -D release-x.y.z`
 - `git push origin :release-x.y.z`
