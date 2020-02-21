@@ -21,6 +21,9 @@
       "name": "Adam Szaraniec"
     }
   ],
+  "files": [
+    "index.js"
+  ],
   "engines": {
     "node": ">= 10"
   },
