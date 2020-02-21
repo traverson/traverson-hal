@@ -1,3 +1,16 @@
+# [7.0.0-alpha.3](https://github.com/traverson/traverson-hal/compare/v7.0.0-alpha.2...v7.0.0-alpha.3) (2020-02-21)
+
+
+### Code Refactoring
+
+* limited the files included in the build to minimum required ([f94fc8a](https://github.com/traverson/traverson-hal/commit/f94fc8a99c269c5fdf2dea43483318aadb283a40))
+
+
+### BREAKING CHANGES
+
+* limited the published files to those used by the public api. use of private files
+could break with this change
+
 # [7.0.0-alpha.2](https://github.com/traverson/traverson-hal/compare/v7.0.0-alpha.1...v7.0.0-alpha.2) (2020-02-15)
 
 
