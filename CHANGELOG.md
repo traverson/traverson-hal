@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/traverson/traverson-hal/compare/v7.0.0...v7.0.1) (2020-02-28)
+
+
+### Bug Fixes
+
+* **traverson-peer:** added v7 as a valid peer ([ae0c6ff](https://github.com/traverson/traverson-hal/commit/ae0c6ffc26085b5e6f0b8f9d2af497eec6f630e8))
+
 # [7.0.0](https://github.com/traverson/traverson-hal/compare/v6.1.0...v7.0.0) (2020-02-28)
 
 
