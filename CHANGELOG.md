@@ -1,3 +1,28 @@
+# [7.0.0](https://github.com/traverson/traverson-hal/compare/v6.1.0...v7.0.0) (2020-02-28)
+
+
+### chore
+
+* **bower:** dropped support for bower ([63435ce](https://github.com/traverson/traverson-hal/commit/63435ce1e6c73e9f75d09a3d72a10bc056c9492e))
+
+
+### Code Refactoring
+
+* limited the files included in the build to minimum required ([f94fc8a](https://github.com/traverson/traverson-hal/commit/f94fc8a99c269c5fdf2dea43483318aadb283a40))
+
+
+### Continuous Integration
+
+* **node-versions:** dropped node versions that have reached EOL ([eaaccea](https://github.com/traverson/traverson-hal/commit/eaaccea31af2a9431b96f42ffc1c3de8d56b0066))
+
+
+### BREAKING CHANGES
+
+* limited the published files to those used by the public api. use of private files
+could break with this change
+* **bower:** Bower is no longer supported
+* **node-versions:** node versions that have reached EOL are no longer supported
+
 # [7.0.0-alpha.3](https://github.com/traverson/traverson-hal/compare/v7.0.0-alpha.2...v7.0.0-alpha.3) (2020-02-21)
 
 
