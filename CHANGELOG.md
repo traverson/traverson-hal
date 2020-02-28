@@ -1,3 +1,10 @@
+## [7.0.2](https://github.com/traverson/traverson-hal/compare/v7.0.1...v7.0.2) (2020-02-28)
+
+
+### Bug Fixes
+
+* **package:** update halfred to version 1.1.1 ([ffebbfa](https://github.com/traverson/traverson-hal/commit/ffebbfa13fc62ce356d1bebccd61fce346be5988))
+
 ## [7.0.1](https://github.com/traverson/traverson-hal/compare/v7.0.0...v7.0.1) (2020-02-28)
 
 
