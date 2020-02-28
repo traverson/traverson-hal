@@ -49,7 +49,7 @@
     "HAL"
   ],
   "peerDependencies": {
-    "traverson": "^6.1.0"
+    "traverson": "^6.1.0 || ^7.0.0"
   },
   "dependencies": {
     "halfred": "1.1.0"
