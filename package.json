@@ -35,7 +35,7 @@
     "HAL"
   ],
   "scripts": {
-    "test": "grunt",
+    "test": "grunt test",
     "mocha": "mocha",
     "build": "grunt build",
     "prepack": "run-s build",
