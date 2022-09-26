@@ -29,6 +29,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm clean-install
       - run: npx ls-engines
+      - run: 'npm ls >/dev/null'
       - run: npm test
   verify:
     runs-on: ubuntu-latest
