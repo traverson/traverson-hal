@@ -1,0 +1,42 @@
+name: Node.js CI
+'on':
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+env:
+  FORCE_COLOR: 1
+  NPM_CONFIG_COLOR: always
+jobs:
+  verify-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node:
+          - 10.0.0
+          - 12
+          - 14
+          - 16
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm clean-install
+      - run: npm test
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm clean-install
+      - run: npm test
