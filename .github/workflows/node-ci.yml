@@ -4,6 +4,7 @@ name: Node.js CI
     branches:
       - master
       - renovate/**
+      - beta
   pull_request:
     types:
       - opened
@@ -30,7 +31,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm clean-install
       - run: npx ls-engines
-      - run: 'npm ls >/dev/null'
+      - run: npm ls >/dev/null
       - run: npm test
   verify:
     runs-on: ubuntu-latest
@@ -43,3 +44,21 @@ jobs:
           cache: npm
       - run: npm clean-install
       - run: npm test
+  trigger-release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    needs:
+      - verify
+      - verify-matrix
+    steps:
+      - uses: octokit/request-action@v2.x
+        with:
+          route: >-
+            POST
+            /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
+          owner: traverson
+          repo: traverson-hal
+          ref: ${{ github.ref }}
+          workflow_id: release.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
