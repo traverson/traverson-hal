@@ -1,3 +1,10 @@
+# [8.1.0](https://github.com/traverson/traverson-hal/compare/v8.0.0...v8.1.0) (2022-09-26)
+
+
+### Features
+
+* **traverson:** allowed use of the latest major version ([79ddf72](https://github.com/traverson/traverson-hal/commit/79ddf72748153704777809caf34818dceeb18207))
+
 # [8.0.0](https://github.com/traverson/traverson-hal/compare/v7.0.2...v8.0.0) (2022-09-26)
 
 
