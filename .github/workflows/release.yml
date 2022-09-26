@@ -19,6 +19,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm clean-install
+      - run: npm install semantic-release @traverson/semantic-release-config --no-save
       - name: semantic-release
         run: npx semantic-release
         env:
