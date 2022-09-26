@@ -1,3 +1,15 @@
+# [8.0.0](https://github.com/traverson/traverson-hal/compare/v7.0.2...v8.0.0) (2022-09-26)
+
+
+### Features
+
+* **node-versions:** raised the minimum required version to v14 ([3f80a98](https://github.com/traverson/traverson-hal/commit/3f80a984fbfacf7ceef31353092df10a58b0904e))
+
+
+### BREAKING CHANGES
+
+* **node-versions:** the minimum required version of node is now v14
+
 ## [7.0.2](https://github.com/traverson/traverson-hal/compare/v7.0.1...v7.0.2) (2020-02-28)
 
 
