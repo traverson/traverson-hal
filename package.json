@@ -39,7 +39,8 @@
     "mocha": "mocha",
     "build": "grunt build",
     "prepack": "run-s build",
-    "lint:engines": "ls-engines"
+    "lint:engines": "ls-engines",
+    "prepare": "husky install"
   },
   "files": [
     "index.js"
