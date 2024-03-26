@@ -69,7 +69,7 @@
     "husky": "9.0.1",
     "load-grunt-tasks": "5.1.0",
     "ls-engines": "0.9.1",
-    "mocha": "10.3.0",
+    "mocha": "10.4.0",
     "npm-run-all2": "6.1.2",
     "poll-forever": "1.0.0",
     "request": "2.88.2",
