@@ -70,7 +70,7 @@
     "load-grunt-tasks": "5.1.0",
     "ls-engines": "0.9.1",
     "mocha": "10.4.0",
-    "npm-run-all2": "6.1.2",
+    "npm-run-all2": "6.2.0",
     "poll-forever": "1.0.0",
     "request": "2.88.2",
     "sinon": "18.0.0",
