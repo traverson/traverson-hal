@@ -73,7 +73,7 @@
     "npm-run-all2": "8.0.4",
     "poll-forever": "1.0.0",
     "request": "2.88.2",
-    "sinon": "20.0.0",
+    "sinon": "21.0.0",
     "sinon-chai": "3.7.0",
     "traverson": "8.0.3",
     "traverson-mock-response": "1.1.0",
