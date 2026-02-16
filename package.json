@@ -74,7 +74,7 @@
     "poll-forever": "1.0.0",
     "request": "2.88.2",
     "sinon": "21.0.1",
-    "sinon-chai": "3.7.0",
+    "sinon-chai": "4.0.1",
     "traverson": "8.0.3",
     "traverson-mock-response": "1.1.0",
     "traverson-test-server": "1.12.1"
